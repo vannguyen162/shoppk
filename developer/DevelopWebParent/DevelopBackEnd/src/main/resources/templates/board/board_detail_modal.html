@@ -1,0 +1,23 @@
+<div class="modal-header">
+	<h4 style="color: rgb(190, 40, 40);" class="modal-title">Nội dung tin tức</h4>
+</div>
+
+<div>
+	<div th:utext="${board.fullDescription}" class="border p-2 m-2"></div>
+</div>
+
+<div class="modal-footer">
+	<button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+</div>
+<script type="text/javascript">
+   $(document).ready(function() {
+	   let v = document.getElementById('tbarcode').textContent
+	   generatedBarcode(v)
+	});
+   function generatedBarcode (value){
+		JsBarcode("#barcode", value,{
+		format: 'code128',
+		displayValue: false
+		});
+	}
+  </script>

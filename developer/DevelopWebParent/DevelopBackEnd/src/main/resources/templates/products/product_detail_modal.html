@@ -1,0 +1,128 @@
+<div class="modal-header">
+	<h4 style="color: rgb(190, 40, 40);" class="modal-title">Chi tiết
+		sản phẩm</h4>
+
+</div>
+
+<div>
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item"><a class="nav-link active" data-toggle="tab"
+			href="#overview" role="tab">Tổng quan</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#description" role="tab">Mô tả</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#images" role="tab">Hình ảnh</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#details" role="tab">Chi tiết sản phẩm</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#shipping" role="tab">Shipping</a></li>
+	</ul>
+
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane active p-3" id="overview" role="tabpanel">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Tên sản phẩm</label>
+				<div class="col-sm-10">
+					<input class="form-control" type="text" th:value="${product.name}" readonly />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Định danh</label>
+				<div class="col-sm-10">
+					<input class="form-control" type="text" th:value="${product.alias}" readonly >
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Thương hiệu</label>
+				<div class="col-sm-3">
+					<input class="form-control" type="text" th:value="${product.brand.name}" readonly >
+				</div>
+				<label class="col-sm-2 col-form-label">Danh mục</label>
+				<div class="col-sm-3">
+					<input class="form-control" type="text" th:value="${product.category.name}" readonly >
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Giá nhập</label>
+				<div class="col-sm-2">
+					<input class="form-control" type="text" th:value="${product.cost}" readonly >
+				</div>
+				<label class="col-sm-2 col-form-label">Giá bán</label>
+				<div class="col-sm-2">
+					<input class="form-control" type="text" th:value="${product.price}" readonly >
+				</div>
+				<label class="col-sm-2 col-form-label">Số lượng</label>
+				<div class="col-sm-1">
+					<input class="form-control" type="text" th:value="${product.QtyValue}" readonly >
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Giảm giá</label>
+				<div class="col-sm-2">
+					<input class="form-control" type="text" th:value="${product.discountPercent}" readonly >
+				</div>
+				<label class="col-sm-2 col-form-label">Mã sản phẩm</label>
+				<div class="col-sm-2">
+					<input class="form-control" type="text" th:value="${product.pdtCode}" readonly >
+				</div>
+				<label class="col-sm-2 col-form-label">Số lượt xem</label>
+				<div class="col-sm-1">
+					<input class="form-control" type="text" th:value="${product.NumViewValue}" readonly >
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Hiện sản phẩm:</label> <input
+					type="checkbox" th:checked="${product.enabled}" onclick="return false;">
+				<label class="col-sm-3 col-form-label">Tình trạng còn/hết sản phẩm:</label> <input
+					type="checkbox" th:checked="${product.inStock}" onclick="return false;">
+				<label class="col-sm-2 col-form-label">Sản phẩm chính</label> <input
+					type="checkbox" th:checked="${product.relatedPdt}" onclick="return false;">
+			</div>
+			<div class="form-group row">
+				<label class="col-auto col-form-label">Thời gian khởi tạo:</label>
+				<div class="col-auto">
+					<span class="text-middle">[[${product.CreateDateFormat}]]</span>
+				</div>
+				<label class="col-auto col-form-label">Cập nhật lần cuối:</label>
+				<div class="col-auto">
+					<span th:text="${#dates.format(product.updatedTime, 'dd-MM-yyyy / HH:mm:ss')}" class="text-middle"></span>
+				</div>
+				<label class="col-auto col-form-label">Thâm niên:</label>
+				<div class="col-auto">
+					<span class="text-middle">[[${product.SeniorityInYMD}]]</span>
+				</div>
+			</div>
+			<!-- <p id ="tbarcode" hidden>[[${product.barcode}]]</p>
+			<div><svg id="barcodeRender"></svg></div> -->
+		</div>
+		<div class="tab-pane" id="description" role="tabpanel">
+			<div th:replace="products/product_description_read_only :: content"></div>
+		</div>
+		<div class="tab-pane" id="images" role="tabpanel">
+			<div th:replace="products/product_images_read_only :: content"></div>
+		</div>
+		<div class="tab-pane p-3" id="details" role="tabpanel">
+			<div th:replace="products/product_details_read_only :: content"></div>
+		</div>
+		<div class="tab-pane p-3" id="shipping" role="tabpanel">
+			<div th:replace="products/product_shipping_read_only :: content"></div>
+		</div>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+</div>
+<!-- <script type="text/javascript">
+   $(document).ready(function() {
+	   let v = document.getElementById('tbarcode').textContent
+	   generatedBarcode(v)
+	});
+   function generatedBarcode (value){
+		JsBarcode("#barcodeRender", value,{
+		format: 'code128',
+		displayValue: false
+		});
+	}
+  </script> -->

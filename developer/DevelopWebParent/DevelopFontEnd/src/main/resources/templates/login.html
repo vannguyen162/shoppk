@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_head('Đăng nhập', 'none')"></head>
+
+<body id="br-color-conent">
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4 m-3">
+			<div class="account_form register">
+				<a th:href="@{/}">
+					<h2>Đăng nhập</h2>
+				</a>
+				<div class="mb-2">
+					<!-- <i class="fa fa-google-plus"></i> -->
+					<a class="fa fa-google fa-lg" th:href="@{/oauth2/authorization/google}">&nbsp; Đăng nhập với Google</a>
+					
+				</div>
+				<div class="mb-2">
+					<!-- <i class="fa fa-google-plus"></i> -->
+					<a class="fa fa-facebook fa-lg" th:href="@{/oauth2/authorization/facebook}">&nbsp; Đăng nhập với Facebook</a>
+					
+				</div>
+				<form class="row br-color-w" th:action="@{/login}" method="post">
+					<!-- <input type="hidden" th:field = "*{id}" /> -->
+					<div th:if="${param.error}">
+						<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+					</div>
+					<div th:if="${param.logout}">
+						<p class="text-warning">Bạn vừa đăng xuất</p>
+					</div>
+					<div>
+						<p>
+							<input type="email" name="email" class="form-control" placeholder="E-Mail" required />
+						</p>
+						<p>
+							<input type="password" name="password" class="form-control" placeholder="Mật khẩu" required />
+						</p>
+						<div class="login_submit">
+							<div>
+								<a th:href="@{/forgot_password}">Quên mật khẩu?</a> 
+								<a th:href="@{/register}"> &nbsp; Đăng kí</a>
+							</div>
+							<label for="remember">
+								<input id="remember-me" name="remember-me" type="checkbox"> nhớ tôi
+							</label>
+							<button type="submit">Đăng nhập</button>
+						</div>
+						
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+
+	<!-- JS
+============================================ -->
+<div th:replace="fragments :: modal_dialog"></div>
+
+
+	<!-- Plugins JS -->
+	<script th:src="@{/js/plugins.js}"></script>
+	<!-- Main JS -->
+	<script th:src="@{/js/main.js}"></script>
+
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		var dropDownCountry;
+		var dataListStates;
+		var fieldState;
+
+		$(document).ready(function() {
+			dropDownCountry = $("#country");
+			dataListStates = $("#listStates");
+			fieldState = $("#state");
+
+			dropDownCountry.on("change", function() {
+				loadStatesForCountry();
+				fieldState.val("").focus();
+			});
+		});
+
+		function loadStatesForCountry() {
+			selectedCountry = $("#country option:selected");
+			countryId = selectedCountry.val();
+			url = contextPath + "settings/list_states_by-country/" + countryId;
+
+			$.get(url, function(responseJSON) {
+				dataListStates.empty();
+
+				$.each(responseJSON, function(index, state) {
+					$("<option>").val(state.name).text(state.name).appendTo(
+							dataListStates);
+				});
+			});
+		}
+
+		function checkPasswordMatch(confirmPassword) {
+			if (confirmPassword.value != $("#password").val()) {
+				confirmPassword.setCustomValidity("Mật khẩu không khớp!")
+			} else {
+				confirmPassword.setCustomValidity("");
+			}
+
+		}
+
+		function checkEmailUnique(form) {
+			url = contextPath + "customers/check_unique_email";
+			customerEmail = $("#email").val();
+			csrfValue = $("input[name='_csrf']").val();
+
+			params = {
+				email : customerEmail,
+				_csrf : csrfValue
+			};
+
+			$
+					.post(
+							url,
+							params,
+							function(response) {
+								if (response == "OK") {
+									form.submit();
+								} else if (response == "Duplicated") {
+									showWarningModal("Email này đã được đăng kí vui lòng lựa chọn Email khác: "
+											+ customerEmail);
+								} else {
+									showErrorModal("Không thể kết nối tới máy chủ");
+								}
+
+							}).fail(function() {
+						showErrorModal("Không thể kết nối tới máy chủ");
+					});
+
+			return false;
+		}
+
+		function showModalDialog(title, message) {
+			$('#modalTitle').text(title);
+			$('#modalBody').text(message);
+			$('#modalDialog').modal();
+
+		}
+		function showErrorModal(message) {
+			showModalDialog("Thất bại", message);
+		}
+		function showWarningModal(message) {
+			showModalDialog("Cảnh báo", message);
+		}
+	</script>
+
+</body>
+
+</html>

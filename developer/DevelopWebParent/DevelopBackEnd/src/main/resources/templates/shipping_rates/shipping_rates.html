@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+	<!-- End Head -->
+
+<body  class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/shipping_rates/new}"
+									title="Tạo tin tức"><i class="fas fa-plus"></i>Thêm khu vực</a>
+							</div>
+						</div>
+						<div th:replace="fragments :: message"></div>
+
+						<table class="table table-hover table-bordered js-copytextarea table-responsive"
+							cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+							<thead>
+								<tr>
+									<th class=" fixed-col-fixed">Tính năng</th>
+									<th>Quốc gia</th>
+									<th>Tỉnh thành</th>
+									<th>COD</th>
+									<th>Phí chung</th>
+									<th>Thời gian giao hàng</th>
+									<th>Thời gian khởi tạo</th>
+									<th>Cập nhật lần cuối</th>
+									<th>Người làm việc</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="rate : ${shippingRates}">
+									<td class=" fixed-col-fixed">
+										<div th:replace="fragments :: edit('shipping rate', '/shipping_rates/edit/' + ${rate.id})"></div>
+										<div th:replace="fragments :: delete('shipping rate', ${rate.id}, '/shipping_rates/delete/' + ${rate.id}, true)"></div>
+									</td>
+									<td>[[${rate.country.name}]]</td>
+									<td>[[${rate.state}]]</td>
+									<td>
+										<div th:replace="shipping_rates/shipping_rates_fragment :: cod_support"></div>
+									</td>
+									<td>[[${rate.rate}]]</td>
+									<td>[[${rate.days}]]</td>
+									<td>[[${rate.createDateFormat}]]</td>
+									<td>[[${rate.upDateFormat}]]</td>
+									<td>[[${rate.workUser}]]</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div th:replace="fragments :: pagination('khu vực ')"></div>
+        </div>
+      </div>
+    </div>
+
+<div th:replace="modal_fragments :: confirm_modal"></div>
+<div class="modal fade" id="detailModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>
+  </main>
+
+<!-- Essential javascripts for application to work-->
+
+
+	<script th:src="@{/js/commom-list.js}"></script>
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		moduleURL = "[[@{/shipping_rates}]]";
+
+		$(document).ready(
+				function() {
+					$(".link-delete").on("click", function(e) {
+						e.preventDefault();
+						showDeleteConfirmUserModal($(this), 'khu vực ');
+					});
+					$(".link-detail").on(
+							"click",
+							function(e) {
+								e.preventDefault();
+								linkDetailURL = $(this).attr("href");
+								$("#detailModal").modal("show").find(
+										".modal-content").load(linkDetailURL);
+							});
+				});
+	</script>
+
+
+	<div th:replace="fragments/js.html"></div>
+
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : true,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 1
+			},
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			},
+		});
+	</script>
+</body>
+
+</html>

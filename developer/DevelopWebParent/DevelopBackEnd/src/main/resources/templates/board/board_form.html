@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->
+<head>
+	<head th:replace="fragments :: page_head(${pageTitle}, 'tag')"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/richText/richtext.min.css}">
+	<script th:src="@{/richText/jquery.richtext.js}"></script>
+	
+	<!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
+</head>
+
+<!-- End Head -->
+
+
+
+<body class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	<main class="app-content">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div class="tile">
+
+					<h3 class="tile-title">[[${pageTitle}]]</h3>
+					<div class="tile-body">
+
+						<form th:action="@{/board/save}" method="post" onsubmit="return checkUnique(this)"
+							enctype="multipart/form-data"
+							th:object="${board}" id="myForm">
+							<input type="hidden" th:field = "*{id}" />
+							<input type="hidden" th:field = "*{boardNo}" />
+							<!-- Nav tabs -->
+							<div>
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item"><a class="nav-link active"
+										data-toggle="tab" href="#overview" role="tab">Tổng quan</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab"
+										href="#description" role="tab">Nội dung</a></li>
+								</ul>
+
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div class="tab-pane active p-3" id="overview" role="tabpanel">
+										<div th:replace="board/board_overview :: content"></div>
+									</div>
+									<div class="tab-pane" id="description" role="tabpanel">
+										<th:block th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+											<div th:replace="board/board_description :: content"></div>
+										</th:block>
+									</div>
+								</div>
+								<div>
+									<div class="text-center">
+										<button class="btn btn-save" id="submit-button" type="submit" value="Save">Lưu
+											lại</button>
+										<a class="btn btn-cancel" th:href="@{/board}"
+											value="Cancel">Hủy bỏ</a>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!--
+  MODAL
+-->
+			<div th:replace="modal_fragments :: modal_dialog"></div>
+			<!--
+  MODAL
+-->
+		</div>
+
+	</main>
+
+	<script th:src="@{/js/commom-form.js}"></script>
+	<script th:src="@{/js/product_form_overview.js}"></script>
+
+<script type="text/javascript">
+	MAX_FILE_SIZE = 5242880;
+	
+	moduleURL = "[[@{/board}]]";
+	defaultImageThumbnailSrc = "[[@{/images/default-image.jpg}]]";
+	
+</script>
+<script>
+  var form = document.getElementById("myForm");
+  var inputTitle = document.getElementById("titleNotice");
+  var inputStarDate = document.getElementById("fieldSDate");
+  var inputEndDate = document.getElementById("fieldEDate");
+  var submitButton = document.getElementById("submit-button");
+
+  submitButton.addEventListener("click", function(event) {
+    if(inputStarDate.value === "" || inputEndDate.value === ""){
+      event.preventDefault();
+      showWarningModal("Vui lòng chọn ngày hiển thị");
+    }else if(inputTitle.value === ""){
+      event.preventDefault();
+      showWarningModal("Vui lòng thêm tiêu đề cho tin tức");
+    }
+  });
+</script>
+
+	<!-- <script>
+		tinymce
+				.init({
+					selector : 'textarea#tinyTextField',
+					plugins : [ 'a11ychecker', 'advlist', 'advcode',
+							'advtable', 'autolink', 'checklist', 'export',
+							'lists', 'link', 'image', 'charmap', 'preview',
+							'anchor', 'searchreplace', 'visualblocks',
+							'powerpaste', 'fullscreen', 'formatpainter',
+							'insertdatetime', 'media', 'table', 'help',
+							'wordcount' ],
+					toolbar : 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |'
+							+ 'bullist numlist checklist outdent indent | removeformat | code table help'
+				})
+	</script> -->
+</body>
+
+</html>

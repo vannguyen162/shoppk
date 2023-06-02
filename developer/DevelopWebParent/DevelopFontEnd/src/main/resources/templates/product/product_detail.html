@@ -1,0 +1,556 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+    <!-- Main Wrapper Start -->
+    <!--Offcanvas menu area start-->
+    <div class="off_canvars_overlay">
+                
+    </div>
+<div th:replace="navigation :: offcanvas_menu"></div>
+    
+    <!--header area start-->
+	<header th:replace="navigation :: header_menu"></header>
+    <!--header area end-->
+    <div id="br-color-conent">
+    <!--breadcrumbs area start-->
+	<div th:replace="breadcrumb :: breadcrumbs"></div>
+    <!--breadcrumbs area end-->
+    
+    <!--product details start-->
+    <div class="product_details">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-md-5">
+                   <div class="product-details-tab">
+
+                        <div id="img-1" class="zoomWrapper single-zoom">
+                            <a href="#">
+                                <img id="zoom1" th:src="@{${product.mainImagePath}}" th:data-zoom-image="@{${product.mainImagePath}}" alt="big-1">
+                            </a>
+                        </div>
+
+                        <div class="single-zoom-thumb">
+                            <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
+<!--                                 <li>
+                                    <a href="#" class="elevatezoom-gallery active" data-update="" th:data-image="@{${product.mainImagePath}}" th:data-zoom-image="@{${product.mainImagePath}}">
+                                        <img th:src="@{${product.mainImagePath}}" alt="zo-th-1"/>
+                                    </a>
+                                </li> -->
+                                <th:block th:each="extraImage : ${product.images}">
+                                <li>
+                                    <a href="#" class="elevatezoom-gallery active" data-update="" th:data-image="@{${extraImage.imagePath}}" th:data-zoom-image="@{${extraImage.imagePath}}">
+                                        <img th:src="@{${extraImage.imagePath}}" alt="zo-th-1"/>
+                                    </a>
+                                </li>
+                                </th:block>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-7">
+                    <div class="product_d_right">
+                       <form action="#">
+                           
+                            <h1>[[${product.name}]]</h1>
+							<div class="product_code">
+								<div class="pdt-content">
+									<span>Thương hiệu</span> &nbsp;<span class="box-pdt">[[${product.brand.name}]]</span>
+								</div>
+								<div class="pdt-content">
+									<span>Mã sản phẩm</span> &nbsp;<span class="box-pdt">[[${product.pdtCode}]]</span>
+								</div>
+							</div>
+							<div class=" product_ratting row">
+                                <div class="col-sm-2">
+                                	<div>
+                                		<span th:if="${product.inStock}" class="text-success">Còn hàng</span>
+                                		<span th:unless="${product.inStock}" class="text-danger">Hết hàng</span>
+                                	</div>
+                                </div>
+                            </div>
+							<div class="product_desc">
+                                <p th:utext="${product.shortDescription}"></p>
+                            </div>
+							<div class="product_view ">
+								<div class="line-block">
+                                <span>Số lượng còn lại</span>
+                                <span class="color-wrn">[[${product.qty}]]</span>
+								</div>
+								<div class="line-block">
+                                <span class="color-wrn">[[${product.NumViewValue}]]</span>
+                                <span>lượt xem</span>
+                                </div>
+                            </div>
+							<div class="product_price">
+								<div>Giá bán:
+									<span class="price-sales"  th:if="${product.discountPercent <= 0}">
+										<div th:replace="fragments :: price_fragment(${product.price})"></div>
+									</span>&nbsp;
+									<span th:if="${product.discountPercent > 0}" class="current_price">
+										<div th:replace="fragments :: price_fragment(${product.price})"></div>
+									</span>
+								</div>
+								<div th:if="${product.discountPercent > 0}" class="price-new">
+									<div class="price-new-ct">
+										Giá khuyến mãi:&nbsp; <span class=" price-sales">
+											<div th:replace="fragments :: price_fragment(${product.discountPriceSale})"></div>
+										</span> &nbsp;
+									</div>
+									<div class="price-new-ct">
+										<span>(Giảm</span>
+										<span class="box-price-percent">[[${product.discountPercentPrice}]]%</span>
+										<span>)</span>
+									</div>
+									<!-- <span class="old_price" style="text-decoration: line-through;">$[[${product.price}]]</span> -->
+								</div>
+							</div>
+							<th:block th:if="${product.inStock}">
+								<div class="product_variant quantity">
+									<span>Số lượng &nbsp;</span>
+									<div
+										th:replace="cart/quantity_control :: quantity_control(1, ${product.id})"></div>
+									<button class="button" type="button" id="buttonAdd2Cart">Thêm vào giỏ</button>
+								</div>
+							</th:block>
+							<div class=" product_d_action">
+                               <ul>
+                                   <li><a href="#" title="Add to wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i> Thêm vào danh sách yêu thích</a></li>
+                                   <li><a href="#" title="Add to Compare"><i class="fa fa-sliders" aria-hidden="true"></i> So sánh sản phẩm này</a></li>
+                               </ul>
+                            </div>
+                            
+                        </form>
+                        <div class="priduct_social">
+                            <button class="btn btn-ff6a28" id="CopyLinkPdt" onclick="copyToClipboard()">Copy link sản phẩm</button>
+                            <span id="checkmark" style="display:none;">&#10004; Copied!</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+    <!--product details end-->
+    
+    <!--product info start-->
+    <div class="product_d_info">
+        <div class="container">   
+            <div class="row">
+                <div class="col-12">
+                    <div class="product_d_inner">   
+                        <div class="product_info_button">    
+                            <ul class="nav" role="tablist">
+                                <li>
+                                     <a data-toggle="tab" href="#sheet" role="tab" aria-controls="sheet" aria-selected="false">Cấu hình</a>
+                                </li>
+                                <li >
+                                    <a class="active" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Thông tin chi tiết</a>
+                                </li>
+                                <li>
+                                   <a data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Bình luận</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel" >
+                                <div class="product_info_content">
+                                    <p th:utext="${product.fullDescription}"></p>
+                                </div>    
+                            </div>
+
+                            <div class="tab-pane fade" id="sheet" role="tabpanel" >
+                                <div class="product_d_table">
+                                   <form action="#">
+                                        <table>
+                                            <tbody>
+												<th:block th:each="detail : ${product.details}">
+													<tr>
+														<td class="first_child">[[${detail.name}]]</td>
+														<td>[[${detail.value}]]</td>
+													</tr>
+												</th:block>
+											</tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="reviews" role="tabpanel" >
+                                <div class="product_info_content">
+                                    <p>Bình luận sản phẩm  <b>[[${product.shortName}]]</b> </p>
+                                </div>
+								<div class="product_review_form">
+									<section class="gradient-custom">
+										<div class="container">
+											<div class="row d-flex justify-content-center">
+												<div class="col-12">
+													<div class="card">
+														<div class="card-body p-4">
+															<div class="row">
+																<div class="col-12" th:each="c : ${comments}">
+																	<div class="d-flex flex-start">
+																		<div class="flex-grow-1 flex-shrink-1 comment" >
+																			<div class="pb-2">
+																				<div
+																					class="d-flex justify-content-between align-items-center">
+																					<p class="mb-1" style="font-weight: 600;">
+																						- [[${c.customer.FullName}]] <span class="small" style="opacity: 0.5">- [[${c.CreatedTimeFormat}]]</span>
+																					</p>
+																					<th:block sec:authorize="isAuthenticated()">
+																						<div class="col-auto" th:if="${isCommentByCustomer != null and isCommentByCustomer.contains(c)}">
+																						<a title="Xóa bình luận này" class="linkDelete"
+																								th:entityId="${c.id}"
+																								th:href="@{'/comments/delete/' + ${c.id}}"><i
+																								class="fa fa-trash-o pl-2"></i></a>
+																						</div>
+																					</th:block>
+																				</div>
+																				<div>
+																					<p class="mb-0 comment-content pl-3">[[${c.content}]]</p>
+																				</div>
+																				<div class="row">
+																					<a href="#!" sec:authorize="isAuthenticated()"
+																						class="reply-button col-auto" th:data-comment-id="${c.id}">
+																						<i class="fa fa-reply" aria-hidden="true"></i> <span
+																						class="small"> Trả lời</span>
+																					</a>
+																				</div>
+																			</div>
+																			<th:block th:each="r : ${c.replies}">
+																				<div class="d-flex flex-start mt-1 pl-2">
+																					<div class="flex-grow-1 flex-shrink-1">
+																						<div class="reply-comments-group">
+																							<div
+																								class="d-flex justify-content-between align-items-center">
+																								<p class="mb-1" style="font-weight: 600;">
+																									[[${r.customer.FullName}]] <span class="small" style="opacity: 0.5">- [[${r.CreatedTimeFormat}]]</span>
+																								</p>
+																								<th:block sec:authorize="isAuthenticated()">
+																									<div th:if="${isRepliesByCustomer != null and isRepliesByCustomer.contains(r)}">
+																										<a title="Xóa bình luận này" class="linkDeleteReplies"
+																											th:entityRepliesId="${r.id}"
+																											th:href="@{'/replies/delete/' + ${r.id}}"><i
+																											class="fa fa-trash-o pl-2"></i></a>
+																									</div>
+																								</th:block>
+																							</div>
+																							<p class="mb-0 comment-replies pl-2">[[${r.content}]]</p>
+																						</div>
+																					</div>
+																				</div>
+																			</th:block>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="mt-3">
+																<th:block sec:authorize="isAnonymous()">
+																	<span style="color: red">* Đăng nhập để bình luận sản phẩm</span>
+																</th:block>
+																<th:block sec:authorize="isAuthenticated()">
+																	<form id="comment-form">
+																		<div>
+																			<input required="required"
+																				placeholder="Nhập bình luận của bạn...">
+																		</div>
+																		<div>
+																			<button class="btn btn-ff6a28">Gửi</button>
+																		</div>
+																	</form>
+																</th:block>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</section>
+								</div>
+							</div>
+                        </div>
+                    </div>     
+                </div>
+            </div>
+        </div>    
+    </div>  
+    <!--product info end-->
+    
+    <!--product section area start-->
+    <section class="product_section related_product">
+        <div class="container">
+            <div class="row">   
+                <div class="col-12">
+                   <div class="section_title">
+                       <h2>Sản phẩm tiêu biểu</h2>
+                       <p>Sản phẩm có chất lượng ngoài sự mong đợi của khách hàng khi sử dụng</p>
+                   </div>
+                </div> 
+            </div>    
+            <div class="product_area"> 
+                 <div class="row">
+                    <div class="product_carousel product_three_column4 owl-carousel">
+                        <div class="col-lg-3" th:each="productRelated : ${listProductsRelateds}">
+                            <div class="single_product">
+                                <div class="product_thumb">
+                                    <a class="primary_img" th:href="@{'/p/' + ${productRelated.alias}}"><img th:src="@{${productRelated.mainImagePath}}" alt=""></a>
+                                    <a class="secondary_img" th:href="@{'/p/' + ${productRelated.alias}}"><img th:src="@{${productRelated.mainImagePath}}" alt=""></a>
+                                    <div class="product_action">
+                                        <div class="hover_action">
+                                           <a  href="#"><i class="fa fa-plus"></i></a>
+                                            <div class="action_button">
+                                                <ul>
+                                                    <li><a title="add to cart" href="cart.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a></li>
+                                                    <li><a href="wishlist.html" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                                    <li><a href="compare.html" title="Add to Compare"><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                       </div>
+
+                                    </div>
+                                    <div class="product_sale">
+                                        <span>-[[${productRelated.discountPercentPrice}]]%</span>
+                                    </div>
+                                </div>
+                                <div class="product_content">
+									<h3>
+										<a th:href="@{'/p/' + ${productRelated.alias}}">[[${productRelated.shortName}]]</a>
+									</h3>
+									<div th:if="${productRelated.discountPercent <= 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productRelated.price})"></div>
+										</span>
+									</div>
+									<div th:if="${productRelated.discountPercent > 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productRelated.discountPriceSale})"></div>
+										</span> <span class="old_price">
+											<div
+												th:replace="fragments :: price_fragment(${productRelated.price})"></div>
+										</span>
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+               
+        </div>
+    </section>
+    <!--product section area end-->
+    
+    <!--product section area start-->
+    <section class="product_section upsell_product">
+        <div class="container">
+            <div class="row">   
+                <div class="col-12">
+                   <div class="section_title">
+                       <h2>Sản phẩm được quan tâm nhất</h2>
+                   </div>
+                </div> 
+            </div>    
+            <div class="product_area"> 
+                 <div class="row">
+                    <div class="product_carousel product_three_column4 owl-carousel">
+                        <div class="col-lg-3" th:each="productView : ${listProductsByViews}">
+                            <div class="single_product">
+                                <div class="product_thumb">
+                                    <a class="primary_img" th:href="@{'/p/' + ${productView.alias}}"><img th:src="@{${productView.mainImagePath}}" alt=""></a>
+                                    <a class="secondary_img" th:href="@{'/p/' + ${productView.alias}}"><img th:src="@{${productView.mainImagePath}}" alt=""></a>
+                                    <div class="product_action">
+                                        <div class="hover_action">
+                                           <a  href="#"><i class="fa fa-plus"></i></a>
+                                            <div class="action_button">
+                                                <ul>
+                                                    <li><a title="add to cart" href="cart.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a></li>
+                                                    <li><a href="wishlist.html" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                                    <li><a href="compare.html" title="Add to Compare"><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
+                                                </ul>
+                                            </div>
+                                       </div>
+                                    </div>
+                                    <div class="product_sale">
+                                        <span>-[[${productView.discountPercentPrice}]]%</span>
+                                    </div>
+                                </div>
+								<div class="product_content">
+									<h3>
+										<a th:href="@{'/p/' + ${productView.alias}}">[[${productView.shortName}]]</a>
+									</h3>
+									<div th:if="${productView.discountPercent <= 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productView.price})"></div>
+										</span>
+									</div>
+									<div th:if="${productView.discountPercent > 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productView.discountPriceSale})"></div>
+										</span> <span class="old_price">
+											<div
+												th:replace="fragments :: price_fragment(${productView.price})"></div>
+										</span>
+									</div>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+               
+        </div>
+    </section>
+    <!--product section area end-->
+    
+    <!--footer area start-->
+	<div th:replace="navigation :: footer"></div>
+	</div>
+	<div th:replace="fragments :: modal_dialog"></div>
+	<div th:replace="fragments :: confirm_modal"></div>
+    <!--footer area end-->
+    
+
+<!-- JS
+============================================ -->
+
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+
+<script th:src="@{/js/quantity_control.js}"></script>
+<script th:src="@{/js/common_modal.js}"></script>
+
+<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	productId = "[[${product.id}]]";
+	
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+	
+	function copyToClipboard() {
+        var productLink = window.location.origin + contextPath + 'p/' + "[[${product.alias}]]";
+        var tempInput = document.createElement("input");
+        tempInput.setAttribute("value", productLink);
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        var checkmark = document.getElementById("checkmark");
+        checkmark.style.display = "inline-block";
+        setTimeout(function() { checkmark.style.display = "none"; }, 3000);
+    }
+</script>
+<script>
+$(document).ready(function() {
+	contextPath = "[[@{/}]]";
+	productId = "[[${product.id}]]";
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+    $("#comment-form").submit(function(event) {
+        event.preventDefault();
+        var content = $(this).find("input").val();
+        $.ajax({
+            url: contextPath + "comments?productId=" + productId,
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                productId: productId,
+                content: content
+            }),
+            headers: {
+                [csrfHeaderName]: csrfValue
+            },
+            success: function(response) {
+                $("#comment-form input").val("");
+                var comment = $("<div>").addClass("d-flex flex-start")
+                    .html(response.html);
+                $(".card-body").append(comment);
+                location.reload();
+            }
+        });
+    });
+    
+    $(".reply-button").on("click", function(e) {
+    	  e.preventDefault();
+    	  var commentId = $(this).data("comment-id");
+    	  var replyForm = $("<form>").attr("id", "reply-form").html($("#comment-form").html());
+    	  $(this).closest(".comment").append(replyForm);
+    	  replyForm.submit(function(event) {
+    	    event.preventDefault();
+    	    var content = $(this).find("input").val();
+    	    $.ajax({
+    	    	url: encodeURI(contextPath + "replies?productId=" + productId + "&commentId=" + commentId),
+    	      method: "POST",
+    	      contentType: "application/json",
+    	      data: JSON.stringify({
+    	        productId: productId,
+    	        content: content
+    	      }),
+    	      headers: {
+    	        [csrfHeaderName]: csrfValue
+    	      },
+    	      success: function(response) {
+    	        replyForm.remove();
+    	        var reply = $("<div>").addClass("d-flex flex-start mt-1 pl-4")
+    	          .html(response.html);
+    	        $(`.comment[data-comment-id="${commentId}"]`).closest(".comment")
+    	          .after(reply);
+    	        location.reload();
+    	      },
+    	      error: function(xhr, status, error) {
+    	        console.log(xhr.responseText);
+    	      }
+    	    });
+    	  });
+    });
+    
+    
+
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".linkDelete").on("click", function(evt){
+		evt.preventDefault();
+		showDeleteConfirmModal($(this), 'bình luận');
+	});
+});
+
+function showDeleteConfirmModal(link, entityName){
+	entityId = link.attr("entityId");
+	
+	$("#yesButton").attr("href", link.attr("href"));
+	$("#confirmText").text("Bạn muốn xóa " + entityName + "?");
+	$("#confirmModal").modal();
+}
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".linkDeleteReplies").on("click", function(evt){
+		evt.preventDefault();
+		showDeleteConfirmModal($(this), 'câu trả lời');
+	});
+});
+
+function showDeleteConfirmModal(link, entityName){
+	entityId = link.attr("entityRepliesId");
+	
+	$("#yesButton").attr("href", link.attr("href"));
+	$("#confirmText").text("Bạn muốn xóa " + entityName + "?");
+	$("#confirmModal").modal();
+}
+</script>
+
+	<script th:src="@{/js/add_to_cart.js}"></script>
+
+</body>
+
+</html>

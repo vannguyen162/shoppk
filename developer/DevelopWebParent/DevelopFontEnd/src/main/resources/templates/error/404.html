@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head('404', 'none')"></head>
+	<!-- End Head -->
+<body>
+
+	<!-- Main Header -->	
+	<div th:replace="navigation :: offcanvas_menu"></div>
+	<header th:replace="navigation :: header_menu"></header>
+	<!-- End Header -->
+	<main class="app-content">
+	<div class="m-5 text-center">
+		<h2>404. Không tìm thấy trang.</h2>
+	
+	</div>
+	</main>
+	
+	<!-- JS import -->	
+	<div th:replace="navigation :: footer"></div>
+	<!-- End JS import -->	
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

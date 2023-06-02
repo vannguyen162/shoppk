@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head('500', 'none')"></head>
+	<!-- End Head -->
+<body>
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	<main class="app-content">
+	<div class="m-5 text-center">
+		<h2>500. Máy chủ không phản hồi!.</h2>
+		<span>Vui lòng thử lại sau</span>
+	</div>
+	</main>
+
+</body>
+</html>

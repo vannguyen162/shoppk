@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head('Quản lý người dùng', 'none')"></head>
+	<!-- End Head -->
+
+<body  class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/orders/new}"
+									title="Tạo tin tức"><i class="fas fa-plus"></i>Thêm thông báo</a>
+							</div>
+						</div>
+						<div th:replace="fragments :: message"></div>
+
+						<table class="table table-hover table-bordered js-copytextarea table-responsive"
+							cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+							<thead>
+								<tr>
+									<th>Tính năng</th>
+									<th>Trạng thái</th>
+									<th>Khách hàng</th>
+									<th>Thành tiền</th>
+									<th>Thời gian đặt hàng</th>
+									<th>Địa chỉ</th>
+									<th>Số điện thoại</th>
+									<th>Loại hình thanh toán</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="order : ${listOrders}">
+									<td class="fixed-col-fixed">
+											<a class="linkOrderDetail p-2"
+											th:href="@{'/orders/detail/' + ${order.id}}"
+											title="Chi tiết đơn hàng"> <span class="iconify" data-icon="gg:details-more" style="color: #219917;" data-width="24" data-height="24"></span>
+											</a>
+											<div
+												th:replace="fragments :: edit('đơn hàng', '/orders/edit/' + ${order.id})"></div>
+											<div
+												th:replace="fragments :: delete('đơn hàng', ${order.id}, '/orders/delete/' + ${order.id}, true)"></div>
+									</td>
+									<td>[[${order.status}]]</td>
+									<td >
+										<a class="linkCustomerDetail" th:href="@{'/customers/detail/' + ${order.customer.id}}">
+											[[${order.customer.fullName}]]
+										</a>
+									</td>
+									<td>
+										<div th:replace="fragments :: format_currency(${order.total})"></div>
+									</td>
+									<td>
+										<div th:replace="fragments :: format_time(${order.orderTime})"></div>
+									</td>
+									<td>[[${order.Destination}]]</td>
+									<td>[[${order.phoneNumber}]]</td>
+									<td>[[${order.paymentMethod}]]</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div th:replace="fragments :: pagination('đơn hàng ')"></div>
+        </div>
+      </div>
+    </div>
+
+<div th:replace="modal_fragments :: confirm_modal"></div>
+
+<div class="modal fade" id="detailModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>
+
+<div class="modal fade" id="orderDetailModal">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content"></div>
+	</div>
+</div>
+
+  </main>
+
+<!-- Essential javascripts for application to work-->
+
+
+	<script th:src="@{/js/commom-list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/orders}]]";
+
+
+		$(document).ready(function() {
+
+			handleLinkViewCustomerDetals();
+			handleLinkViewOrderDetals();
+			handleLinkDeleteOrder();
+		});
+		
+		function handleLinkViewCustomerDetals(){
+			$(".linkCustomerDetail").on("click", function(e){
+				e.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+			});
+		}
+		
+		function handleLinkViewOrderDetals(){
+			$(".linkOrderDetail").on("click", function(e){
+				e.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				$("#orderDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+			});
+		}
+		
+		function handleLinkDeleteOrder(){
+			$(".link-delete").on("click", function(e){
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'đơn hàng này');
+			});
+		}
+	</script>
+
+	<div th:replace="fragments/js.html"></div>
+
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : true,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 2
+			},
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			}
+		});
+	</script>
+</body>
+
+</html>

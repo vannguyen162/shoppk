@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!-- Main Head -->
+<head>
+<head th:replace="fragments :: page_head(${pageTitle}, 'tag')" />
+
+</head>
+<!-- End Head -->
+<body class="app sidebar-mini rtl">
+	<!-- Main Header -->
+	<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	<main class="app-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tile">
+					<h3 class="tile-title">[[${pageTitle}]]</h3>
+					<div class="tile-body">
+						<form class="row" th:action="@{/slider/save}"
+							enctype="multipart/form-data"
+							th:object="${slider}" method="post" id="myForm">
+							<input type="hidden" th:field="*{id}" />
+							<div class="form-group col-sm-12">
+								<div>
+									<label>Poster tin tức</label>
+								</div>
+								<div class="m-2">
+									<img id="thumbnail" alt="Main image preview" class="img-fluid"
+										width="200px" th:src="@{${slider.sliderImagePath}}">
+								</div>
+								<div>
+									<input type="file" id="fileImage" name="fileImage"
+										onchange="checkFileSize(this)"
+										th:required="${slider.mainImage == null}"
+										accept="image/png , image/jpeg" />
+								</div>
+								<input type="hidden" th:field="*{mainImage}" />
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-6 row">
+									<label class="col-sm-4 col-form-label">Ngày bắt đầu sự
+										kiện</label>
+									<div class="col-auto">
+										<th:block
+											th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+											<th:block
+												th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+												<input class="form-control" type="date"
+													th:field="*{startDate}" readonly="readonly">
+											</th:block>
+										</th:block>
+										<th:block
+											th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+											<input class="form-control" id="fieldSDate" type="date"
+												th:field="*{startDate}" required>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-sm-6 row">
+									<label class="col-sm-4 col-form-label">Ngày kết thúc sự
+										kiện</label>
+									<div class="col-auto">
+										<th:block
+											th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+											<th:block
+												th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+												<input class="form-control" type="date"
+													th:field="*{endDate}" readonly="readonly">
+											</th:block>
+										</th:block>
+										<th:block
+											th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+											<input class="form-control" type="date" th:field="*{endDate}"
+												required>
+										</th:block>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-auto col-form-label">Hiển thị thông báo</label>
+								<div class="col-auto">
+									<th:block
+										th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')')}">
+										<th:block
+											th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+												<input type="checkbox" th:field="*{enabled}"
+													disabled="disabled">
+										</th:block>
+									</th:block>
+									<th:block
+										th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')')}">
+										<input type="checkbox" th:field="*{enabled}">
+									</th:block>
+								</div>
+							</div>
+							<div class="form-group col-md-10 text-center">
+								<button class="btn btn-save" id="submit-button" type="submit"
+									value="Save">Lưu lại</button>
+								<!-- <input class="btn btn-cancel" value="Cancel" id="buttonCancel" /> -->
+								<a class="btn btn-cancel" th:href="@{/slider}" value="Cancel">Hủy
+									bỏ</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!--MODAL-->
+			<div th:replace="modal_fragments :: modal_dialog"></div>
+			<!--MODAL-->
+		</div>
+	</main>
+	<!--===============================================================================================-->
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		moduleURL = "[[@{/slider}]]";
+		
+		MAX_FILE_SIZE = 10485760;
+		defaultImageThumbnailSrc = "[[@{/images/default-image.jpg}]]";
+	</script>
+	<script th:src="@{/js/commom-form.js}"></script>
+</body>
+
+</html>

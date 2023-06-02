@@ -1,0 +1,114 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+    <!-- Main Wrapper Start -->
+
+<div th:replace="navigation :: offcanvas_menu"></div>
+<header th:replace="navigation :: header_menu"></header>
+    <!--header area end-->
+<div id="br-color-conent">
+    <!--breadcrumbs area start-->
+	<div th:replace="breadcrumb :: breadcrumbs"></div>
+    <!--breadcrumbs area end-->
+    
+    <!--shop  area start-->
+    <div class="shop_area shop_reverse">
+        <div class="container">
+            <div class="shop_inner_area">
+                <div class="row">
+                    <div class="col-lg-3 col-md-12">
+                       <!--sidebar widget start-->
+                        <div class="sidebar_widget">
+                            <div class="widget_list widget_filter">
+                                <h2>Lọc theo giá</h2>
+								<form action="#" method="get">
+									<div id="slider-range"></div>
+									<button type="submit">Lọc</button>
+									<span id="filter-range"></span>
+									<input type="hidden" name="minPrice" id="minPrice" value="0">
+									<input type="hidden" name="maxPrice" id="maxPrice" value="0">
+								</form>
+							</div>
+                            <div class="widget_list widget_categories">
+                                <h2>Danh mục</h2>
+                                <th:block th:each="cat : ${category.children}">
+                                <ul th:if="${cat.enabled == true}">
+                                    <li><a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a> </li>
+                                </ul>
+                                </th:block>
+                            </div>
+
+                        </div>
+                        <!--sidebar widget end-->
+                    </div>
+                    <div class="col-lg-9 col-md-12">
+                        <!--shop wrapper start-->
+                        <!--shop toolbar start-->
+                        <div class="shop_title">
+                            <h1>shop</h1>
+                        </div>
+                        <div class="shop_toolbar_wrapper">
+                            <div class="page_amount">
+                                <span>Tất cả [[${totalItems}]] sản phẩm</span>
+                            </div>
+                        </div>
+                         <!--shop toolbar end-->
+                        
+                         <div class="row shop_wrapper">
+                            <th:block th:each="product : ${listProducts}">
+                            	<div th:replace="product/product_fragment :: content"></div>
+                            </th:block>
+                        </div>
+                        
+                        <div th:replace="fragments :: pagination('/c/' + ${category.alias}, 'sản phẩm')"></div>
+                        
+                        
+                        
+                        <!--shop toolbar end-->
+                        <!--shop wrapper end-->
+                    </div>
+                </div>
+            </div>   
+                
+        </div>
+    </div>
+    <!--shop  area end-->
+    
+    <!--footer area start-->
+    <div th:replace="navigation :: footer"></div>
+    <!--footer area end-->
+</div>    
+<!-- JS
+============================================ -->
+
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#slider-range").slider({
+        range: true,
+        min: 0,
+        max: 30000000,
+        values: [0, 30000000],
+        slide: function(event, ui) {
+            $("#minPrice").val(ui.values[0]);
+            $("#maxPrice").val(ui.values[1]);
+        },
+        change: function(event, ui) {
+            $("#filter-range").text(ui.values[0] + " - " + ui.values[1]);
+        }
+    });
+});
+</script>
+
+</body>
+
+</html>

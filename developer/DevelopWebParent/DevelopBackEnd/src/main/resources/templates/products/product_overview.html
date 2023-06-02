@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="content" th:remove="tag">
+
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label tableCodeFalse">Tên sản phẩm</label>
+			<div class="col-sm-10">
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="text" th:field="*{name}" readonly="readonly" >
+				</th:block>
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="text" th:field="*{name}" >
+				</th:block>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Định danh</label>
+			<div class="col-sm-10">
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="text" th:field="*{alias}" readonly="readonly">
+				</th:block>
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="text" th:field="*{alias}"
+						placeholder="Mặc định là tên sản phẩm(Thay đổi nếu bạn muốn đổi)" minlength="3" maxlength="256">
+				</th:block>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Thương hiệu</label>
+			<div class="col-sm-10">
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+				<select class="form-control" th:field="*{brand}" required>
+					<th:block th:each="brand : ${listBrands}">
+						<option th:value="${brand.id}">[[${brand.name}]]</option>
+					</th:block>
+				</select>
+				</th:block>
+				
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="text" th:value="${product.brand.name}" readonly>
+				</th:block>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Danh mục</label>
+			<div class="col-sm-10">
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+					<th:block th:if="${product.category != null}">
+						<select class="form-control" th:field="*{category}" required>
+							<th:block th:each="cat : ${product.brand.categories}">
+								<option th:value="${cat.id}">[[${cat.name}]]</option>
+							</th:block>
+						</select>
+					</th:block>
+
+
+					<th:block th:if="${product.category == null}">
+						<select class="form-control" th:field="*{category}" required>
+						</select>
+					</th:block>
+				</th:block>
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="text" th:value="${product.category.name}" readonly>
+				</th:block>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-auto col-form-label tableCodeFalse">Giá nhập</label>
+			<div class="col-auto">
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="number" step="0.01" th:field="*{cost}" readonly="readonly" >
+				</th:block>
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+					<input class="form-control" type="number" step="0.01" th:field="*{cost}" >
+				</th:block>
+			</div>
+			<label class="col-auto col-form-label tableCodeFalse">Giá bán</label>
+			<div class="col-auto row">
+				<input class="col-auto form-control" step="0.01" type="number" th:field="*{price}">
+			</div>
+			<label class="col-auto col-form-label">Giảm giá</label>
+			<div class="col-auto">
+				<input class="form-control" step="0.01" type="number" th:field="*{discountPercent}">
+			</div>
+			<label class="col-auto col-form-label tableCodeFalse">Số lượng</label>
+			<div class="col-auto">
+				<input class="form-control" step="1" type="number" th:field="*{qty}">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Loại sản phẩm</label>
+			<div class="col-sm-2">
+				<select th:field="*{kind}" class="form-control">
+						<option value="A01"    th:selected="(${kind} == A01 )">Sản phẩm bình thường</option>
+						<option value="B01"    th:selected="(${kind} == B01 )">Sản phẩm nổi bật</option>
+						<option value="D01"    th:selected="(${kind} == D01 )">Sản phẩm ưu tiên</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row" hidden>
+			<label class="col-sm-2 col-form-label">Loại vải</label>
+			<div class="col-sm-2">
+				<select th:field="*{fabric}" class="form-control">
+						<option value="Cotton"    th:selected="(${fabric} == Cotton )">Cotton</option>
+						<option value="Kaki"    th:selected="(${fabric} == Kaki )">Kaki</option>
+						<option value="Jean"    th:selected="(${fabric} == Jean )">Jean</option>
+						<option value="len"    th:selected="(${fabric} == 'len' )">len</option>
+						<option value="Kate"    th:selected="(${fabric} == Jean )">Kate</option>
+						<option value="Ren"    th:selected="(${fabric} == Ren )">Ren</option>
+						<option value="Lụa"    th:selected="(${fabric} == Lụa )">Lụa</option>
+						<option value="Canvas"    th:selected="(${fabric} == Canvas )">Canvas</option>
+						<option value="Nỉ (flet)"    th:selected="(${fabric} == 'Nỉ (flet)' )">Nỉ (flet)</option>
+						<option value="Voan (chiffon)"    th:selected="(${fabric} == 'Voan (chiffon)' )">Voan (chiffon)</option>
+						<option value="Lanh (linen)"    th:selected="(${fabric} == 'Lanh (linen)' )">Lanh (linen)</option>
+						<option value="Đũi (tussar hoặc tussah)"    th:selected="(${fabric} == 'Đũi (tussar hoặc tussah)' )">Đũi (tussar hoặc tussah) (linen)</option>
+						<option value="Ni lông"    th:selected="(${fabric} == 'Ni lông' )">Ni lông</option>
+						<option value="Tuyết mưa"    th:selected="(${fabric} == 'Tuyết mưa' )">Tuyết mưa</option>
+						<option value="PE"    th:selected="(${fabric} == 'PE' )">PE</option>
+						<option value="Visco"    th:selected="(${fabric} == 'Visco' )">Visco</option>
+						<option value="Spandex"    th:selected="(${fabric} == 'Spandex' )">Spandex</option>
+						<option value="Bamboo"    th:selected="(${fabric} == 'Bamboo' )">Bamboo</option>
+						<option value="Hoa văn"    th:selected="(${fabric} == 'Hoa văn' )">Hoa văn</option>
+						<option value="Denim"    th:selected="(${fabric} == 'Denim' )">Denim</option>
+						
+				</select>
+			</div>
+			<label class="col-sm-1 col-form-label">Size</label>
+			<div class="col-sm-2">
+				<select th:field="*{size}" class="form-control">
+						<option value="S"    th:selected="(${size} == S)">S</option>
+						<option value="M"    th:selected="(${size} == M)">M</option>
+						<option value="XL"   th:selected="(${size} == XL)">XL</option>
+						<option value="XXL"  th:selected="(${size} == XXL)">XXL</option>
+						<option value="XXXL" th:selected="(${size} == XXXL)">XXXL</option>
+						
+				</select>
+			</div>
+			<label class="col-sm-1 col-form-label">Màu sắc</label>
+			<div class="col-sm-2">
+				<select th:field="*{color}" class="form-control">
+						<option value="Đen"    th:selected="(${color} == Đen )">Đen</option>
+						<option value="Trắng"    th:selected="(${color} == Trắng )">Trắng</option>
+						<option value="Đỏ"   th:selected="(${color} == Đỏ )">Đỏ</option>
+						<option value="Hồng"   th:selected="(${color} == Hồng )">Hồng</option>
+						<option value="Hồng cánh sen"   th:selected="(${color} == 'Hồng cánh sen' )">Hồng cánh sen</option>
+						<option value="Xanh dương"  th:selected="(${color} == 'Xanh dương' )">Xanh dương</option>
+						<option value="Xanh lá" th:selected="(${color} == 'Xanh lá' )">Xanh lá</option>
+						<option value="Xanh lục bảo"   th:selected="(${color} == 'Xanh lục bảo' )">Xanh lục bảo</option>
+						<option value="Cam"   th:selected="(${color} == Cam )">Cam</option>
+						<option value="Cam hồng"   th:selected="(${color} == 'Cam hồng' )">Cam hồng</option>
+						<option value="Cam đỏ"   th:selected="(${color} == 'Cam đỏ')">Cam đỏ</option>
+						<option value="Cam tím"   th:selected="(${color} == 'Cam tím')">Cam tím</option> 
+						<option value="Tím"   th:selected="(${color} == Tím)">Tím</option> 
+						<option value="Tím hồng"   th:selected="(${color} == 'Tím hồng')">Tím hồng</option> 
+						<option value="Tím đỏ"   th:selected="(${color} == 'Tím đỏ')">Tím đỏ</option> 
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label"></label> 
+			<div class="ml-1">
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<th:block th:if="${product.category != null}">
+						<input type="checkbox" th:field="*{enabled}" disabled="disabled">
+					</th:block>
+				</th:block>
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+						<input type="checkbox" th:field="*{enabled}">
+				</th:block>
+			</div>
+			<span> hiển thị sản phẩm</span>
+			<label class="col-sm-2 col-form-label"></label> 
+			<!--<div class="ml-1">
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<input type="checkbox" th:field="*{inStock}" disabled="disabled">
+				</th:block>
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+						<input type="checkbox" th:field="*{inStock}">
+				</th:block>
+			</div>
+			 <span> tình trạng(còn/hết) sản phẩm</span>
+			<label class="col-sm-2 col-form-label"></label> -->
+			<div class="ml-1">
+				<th:block th:if="${isReadOnlyForSalesperson}">
+					<input type="checkbox" th:field="*{relatedPdt}" disabled="disabled">
+				</th:block>
+				<th:block th:unless="${isReadOnlyForSalesperson}">
+						<input type="checkbox" th:field="*{relatedPdt}">
+				</th:block>
+			</div> 
+			<span> Sản phẩm tiêu biểu</span>
+		</div>
+	</div>
+
+</body>
+</html>

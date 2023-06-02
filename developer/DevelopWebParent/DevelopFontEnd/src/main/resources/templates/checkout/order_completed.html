@@ -1,0 +1,72 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Hoàn tất thanh toán', 'none')"></head>
+
+<body>
+
+	<!-- Main Wrapper Start -->
+	<!--Offcanvas menu area start-->
+	<div class="off_canvars_overlay"></div>
+
+	<div th:replace="navigation :: offcanvas_menu"></div>
+	<header th:replace="navigation :: header_menu"></header>
+	<!--header area end-->
+
+	<!--shop  area start-->
+	<div class="shop_area shop_reverse">
+		<div class="container">
+			<!--breadcrumbs area start-->
+			<div class="breadcrumbs_area other_bread">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<div class="breadcrumb_content">
+								<ul>
+									<li><a th:href="@{/}">Trang chủ</a></li>
+									<li>/</li>
+									<li>Hoàn tất thanh toán</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--breadcrumbs area end-->
+			<!-- shopping cart area start -->
+			<div class="shopping_cart_area mb-3">
+				<div class="container">
+					<div class="card text-center">
+						<div class="card-header">Đặt hàng thành công</div>
+						<div class="card-body">
+							<h5 class="card-title">Cảm ơn bạn</h5>
+							<p class="card-text">Thông tin đơn hàng đã được gửi tới Email của bạn. </p>
+							<a th:href="@{/}" class="btn btn-primary">Quay về trang chủ</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- shopping cart area end -->
+
+		</div>
+	</div>
+	<!--shop  area end-->
+
+	<!--footer area start-->
+	<div th:replace="navigation :: footer"></div>
+	<!--footer area end-->
+
+
+	<!-- JS
+============================================ -->
+	<!-- Plugins JS -->
+	<script th:src="@{/js/plugins.js}"></script>
+
+	<!-- Main JS -->
+	<script th:src="@{/js/main.js}"></script>
+
+
+</body>
+
+</html>

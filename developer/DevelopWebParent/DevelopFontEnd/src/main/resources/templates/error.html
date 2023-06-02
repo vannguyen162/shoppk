@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head('Lỗi', 'none')"></head>
+	<!-- End Head -->
+<body>
+
+	<!-- Main Header -->	
+	<div th:replace="navigation :: offcanvas_menu"></div>
+	<header th:replace="navigation :: header_menu"></header>
+	<!-- End Header -->
+	<main class="app-content">
+	<div class="m-5 text-center">
+		<h2>Xin lỗi, một lỗi không mong muốn đã xảy ra.</h2>
+	</div>
+	</main>
+	<div th:replace="navigation :: footer"></div>
+
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- Main Head -->
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+<!-- End Head -->
+
+<body  class="app sidebar-mini rtl">
+
+	<!-- Main Header -->
+	<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+
+	<main class="app-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tile">
+					<div class="tile-body">
+
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/products/new}"
+									title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+							</div>
+							<div class="col-sm-3 row">
+								<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+									<div class="col-auto ">
+										<a th:href="@{/products/export/excel}"
+											class="btn btn-excel btn-sm" title="Xuất file Excel"> <i
+											class="fas fa-file-excel"></i> Xuất tất cả "Excel"
+										</a>
+									</div>
+									<div class="col-auto ">
+										<a onclick="printBarcodeList()"
+											class="btn btn-sm" ><i class="fas fa-print"></i> In mã sản phẩm
+										</a>
+									</div>
+								</th:block>
+							</div>
+
+							<div class="col-sm-7 ">
+								<form th:action="@{/products/page/1}" class="form-inline" id="searchForm"
+									style="display: flex;">
+									<input type="hidden" name="sortField" th:value="${sortField}"></input>
+									<input type="hidden" name="sortDir" th:value="${sortDir}"></input>
+									<div class="col-auto row">
+										<label class="p-2">Danh mục</label> <select class="form-control"
+											name="categoryId" id="dropdownCategory">
+											<option value="0">Tất cả danh mục</option>
+											<th:block th:each="cat : ${listCategories}">
+												<option th:value="${cat.id}"
+													th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+											</th:block>
+										</select>
+									</div>
+									<div class="col-auto row fl-right" style="margin-left: auto;">
+										<label class="p-2">Tìm kiếm chi tiết</label> <input 
+											type="search" name="keyword" th:value="${keyword}"
+											class="form-control" placeholder="Nhập từ khóa"
+											aria-label="Search" aria-describedby="search-addon" />
+
+										<button type="submit" class="btn btn-secondary">
+											<i class="fas fa-search"></i>
+										</button>
+										&nbsp;
+										<button type="button" class="btn btn-secondary"
+											onclick="clearFilter()">
+											<i class="fas fa-eraser"></i>
+										</button>
+									</div>
+								</form>
+
+							</div>
+
+							<!-- <div th:replace="fragments :: search_form('/products/page/1')"></div> -->
+
+						</div>
+					</div>
+					<div th:replace="fragments :: message"></div>
+					<div class="wrapper">
+						<table
+							class="table table-hover table-bordered js-copytextarea table-responsive"
+							cellspacing="0" cellpadding="0" id="sampleTable">
+							<thead>
+								<tr>
+									<th>Tính năng</th>
+									<th>Tên sản phẩm</th>
+									<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+										<th>Trạng thái</th>
+									</th:block>
+									<th>Hình ảnh</th>
+									<th>Thương hiệu</th>
+									<th>Danh mục</th>
+									<th>Giá bán</th>
+									<th>Số lượng</th>
+									<th>Còn/hết hàng</th>
+									<th>Mã sản phẩm</th>
+									<th>Lượt xem</th>
+									<th>Thời gian khởi tạo</th>
+									<th>C.nhật lần cuối</th>
+									<th>Người làm việc</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="product : ${listProducts}">
+									<td class="fixed-col-fixed">
+										<!-- <div th:replace="fragments :: category_actions" ></div> -->
+										<a class="link-detail"
+										th:href="@{'/products/detail/' + ${product.id}}"
+										title="Chi tiết sản phẩm"><span class="iconify" data-icon="gg:details-more" style="color: #219917;" data-width="24" data-height="24"> </a> 
+										<th:block
+											sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
+											<div
+												th:replace="fragments :: edit('sản phẩm', '/products/edit/' + ${product.id})"></div>
+										</th:block> 
+										<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+											<div
+												th:replace="fragments :: delete('sản phẩm', ${product.id}, '/products/delete/' + ${product.id}, true)"></div>
+										</th:block>
+									</td>
+									<td><a class="link-detail"
+										th:href="@{'/products/detail/' + ${product.id}}"
+										th:title="${product.name}"> [[${product.shortName}]] </a></td>
+									<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+										<td class="table-td-center">
+											<div
+												th:replace="fragments :: status(${product.enabled}, 'product', '/products/' + ${product.id})"></div>
+										</td>
+									</th:block>
+									<td><img th:src="@{${product.mainImagePath}}"
+										 height="50"></td>
+									<td>[[${product.brand.name}]]</td>
+									<td>[[${product.category.name}]]</td>
+									<td>[[${product.DiscountPriceSale}]]</td>
+									<td>[[${product.QtyValue}]]</td>
+									<td th:class="${product.inStock == false ? 'tableCodeFalse' : ''}">[[${product.InStockFormat}]]</td>
+									<td>[[${product.pdtCode}]]</td>
+									<td>[[${product.NumViewValue}]]</td>
+									<td>[[${product.CreateDateFormat}]]</td>
+									<td>[[${product.UpDateFormat}]]</td>
+									<td>[[${product.workUser}]]</td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				<div th:replace="fragments :: pagination('sản phẩm từ')"></div>
+				</div>
+				<!-- 				<div class="text-center">
+					<span>Hiển thị danh mục tổng</span>
+					<div
+						th:replace="fragments :: pagination('/products', 'sản phẩm từ ')"></div>
+				</div> -->
+
+			</div>
+			</div>
+
+		<div th:replace="modal_fragments :: confirm_modal"></div>
+
+
+		<div class="modal fade" id="detailModal">
+			<div class="modal-dialog modal-xl" style="min-width: 1000px">
+				<div class="modal-content"></div>
+			</div>
+		</div>
+
+		<div id="barcodeList" style="display: none">
+			<div th:each="product : ${listProductsAll}" class="col-6 row">
+				<div class="col-6 print-barcode">
+					<span>[[${product.name}]]</span>
+					<span>[[${product.pdtCode}]]</span>
+				</div>
+				<div class="col-4">
+					<p id="tbarcode" hidden>[[${product.barcode}]]</p>
+					<div>
+						<svg id="barcodeRender"></svg>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</main>
+
+	<!-- Essential javascripts for application to work-->
+
+	<div th:replace="fragments/js.html"></div>
+
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : true,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 2
+			},
+			"language" : {
+				"search" : "Tìm nhanh trong bảng",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			},
+	        dom: 'Bfrtip',
+	        buttons: [
+	            {
+	                extend: 'csv',
+	                text: '<i class="fas fa-file-csv"></i> Xuất file CSV',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(3))'
+	        		},
+	        		filename: 'sp_' + new Date().toLocaleDateString() + "_" + new Date().toLocaleTimeString().slice(0,5)
+	            },
+	            {
+	                extend: 'excel',
+	                text: '<i class="fas fa-file-excel"></i> Xuất file Excel',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(3))'
+	        		},
+	        		filename: 'sp_' + new Date().toLocaleDateString() + "_" + new Date().toLocaleTimeString().slice(0,5)
+	            },
+	            {
+	                extend: 'pdf',
+	                text: '<i class="fas fa-file-pdf"></i> Xuất file PDF',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(3))'
+	        		},
+	        		filename: 'sp_' + new Date().toLocaleDateString() + "_" + new Date().toLocaleTimeString().slice(0,5)
+	            },
+	            {
+	                extend: 'print',
+	                text: '<i class="fas fa-print"></i> In',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(3), :nth-child(4))'
+	        		}
+	            }
+	        ],
+		});
+	</script>
+
+	<script type="text/javascript">
+		moduleURL = "[[@{/products}]]";
+		
+		$(document).ready(function(){
+			$(".link-delete").on("click", function(e){
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'sản phẩm');
+			});
+			$(".link-detail").on("click", function(e){
+				e.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+			});
+			$("#dropdownCategory").on("change", function(){
+				$("#searchForm").submit();
+			})
+		});
+	</script>
+	
+	
+
+<script>
+function printBarcodeList() {
+	  var printWindow = window.open('', '', 'height=600,width=800');
+	  printWindow.document.write('<html><head><title>Barcode List</title>');
+	  printWindow.document.write('<style>svg { width: 100%; height: 100px; }</style>');
+	  printWindow.document.write('</head><body>');
+	  printWindow.document.write(document.getElementById("barcodeList").innerHTML);
+	  printWindow.document.write('</body></html>');
+	  printWindow.document.close();
+	  printWindow.focus();
+	  printWindow.print();
+	  printWindow.close();
+	}
+  
+  function waitForBarcodeGeneration(callback) {
+    // check if barcodes have been generated
+    if (document.querySelectorAll("svg#barcodeRender").length === 0) {
+      setTimeout(() => waitForBarcodeGeneration(callback), 100);
+    } else {
+      callback();
+    }
+  }
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    const barcodeElements = document.querySelectorAll("p#tbarcode");
+    barcodeElements.forEach((barcodeElement, index) => {
+      const barcodeValue = barcodeElement.textContent;
+      const barcodeRender = document.querySelectorAll("svg#barcodeRender")[index];
+      generatedBarcode(barcodeRender, barcodeValue);
+    });
+  });
+  
+  function generatedBarcode(barcodeRender, value) {
+    JsBarcode(barcodeRender, value, {
+      format: "code128",
+      displayValue: false
+    });
+  }
+</script>
+
+
+
+
+</body>
+
+</html>

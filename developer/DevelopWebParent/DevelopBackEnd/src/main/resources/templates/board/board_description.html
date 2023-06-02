@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="m-2">
+			<label>Tiêu đề: </label>
+			<textarea class="form-control" id="titleNotice" th:field=*{title} rows="5" required></textarea>
+		
+		</div>
+		<div class="m-2">
+			<label>Chi tiết: </label>
+			<textarea class="form-control"  th:field="*{fullDescription}" rows="20" required></textarea>
+		
+		</div>
+	</div>
+
+</body>
+</html>

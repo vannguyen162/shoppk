@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+	<!-- End Head -->
+
+<body  class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/slider/new}"
+									title="Tạo tin tức"><i class="fas fa-plus"></i>Thêm quảng cáo</a>
+							</div>
+						</div>
+						<div th:replace="fragments :: message"></div>
+
+						<table class="table table-hover table-bordered js-copytextarea table-responsive"
+							cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+							<thead>
+								<tr>
+									<th >Tính năng</th>
+									<th>Trạng thái</th>
+									<th>Poster</th>
+									<th>Ngày bắt đầu</th>
+									<th>Ngày kết thúc</th>
+									<th>Cập nhật lần cuối</th>
+									<th>Người c.nhật cuối</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="slider : ${listSliders}">
+									<td class=" fixed-col-fixed">
+										<div th:replace="fragments :: edit('slider', '/slider/edit/' + ${slider.id})"></div>
+										<div th:replace="fragments :: delete('slider', ${slider.id}, '/slider/delete/' + ${slider.id}, true)"></div>
+									</td>
+									<td class=" fixed-col-fixed">
+										<div th:replace="fragments :: status(${slider.enabled}, 'slider', '/slider/' + ${slider.id})"></div>
+									</td>
+									<td><img th:src="@{${slider.SliderImagePath}}"
+										 height="50"></td>
+									<td>[[${slider.StartDateFormat}]]</td>
+									<td>[[${slider.EndDateFormat}]]</td>
+									<td>[[${slider.upDateFormat}]]</td>
+									<td>[[${slider.workUser}]]</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div th:replace="fragments :: pagination('slider ')"></div>
+        </div>
+      </div>
+    </div>
+
+<div th:replace="modal_fragments :: confirm_modal"></div>
+<div class="modal fade" id="detailModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>
+  </main>
+
+<!-- Essential javascripts for application to work-->
+
+
+	<script th:src="@{/js/commom-list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/slider}]]";
+
+		$(document).ready(
+				function() {
+					$(".link-delete").on("click", function(e) {
+						e.preventDefault();
+						showDeleteConfirmUserModal($(this), 'quảng cáo ');
+					});
+					$(".link-detail").on(
+							"click",
+							function(e) {
+								e.preventDefault();
+								linkDetailURL = $(this).attr("href");
+								$("#detailModal").modal("show").find(
+										".modal-content").load(linkDetailURL);
+							});
+				});
+	</script>
+
+	<div th:replace="fragments/js.html"></div>
+
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : true,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 2
+			},
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			}
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>[[${SITE_NAME}]] | [[${title}]]</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon"
+	th:href="@{/img/favicon.ico}">
+
+<!-- CSS 
+    ========================= -->
+
+<!-- Plugins CSS -->
+<link rel="stylesheet" th:href="@{/css/plugins.css}">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Main Style CSS -->
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/nvn.css}">
+<script th:src="@{/js/nvn.js}"></script>
+</head>
+<body>
+
+<!-- page-link -->
+     <a th:fragment="page_link(moduleURL, pageNum, label)"
+     	class="page-link" 
+     	th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}  + ${keyword != null ? '&keyword=' + keyword : ''}}">[[${label}]]</a>
+<!-- end page-link -->
+
+	<div th:fragment="pagination(moduleURL, entityName)" th:remove="tag">
+
+		<div class="text-center" th:if="${totalItems > 0}">
+			<span>Hiển thị [[${entityName}]] [[${startCount}]] - [[${endCount}]] trên
+				[[${totalItems}]]</span>
+		</div>
+		<div class="text-center" th:unless="${totalItems > 0}">
+			<span>Không tìm thấy thông tin [[${entityName}]]</span>
+		</div>
+		<div th:if="${totalPages > 1}">
+			<nav>
+				<ul class="pagination justify-content-center">
+					<li
+						th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="fragments :: page_link(${moduleURL}, 1, 'Trang đầu')"></a>
+					</li>
+					<li
+						th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="fragments :: page_link(${moduleURL}, ${currentPage - 1}, 'Lui')"></a>
+					</li>
+					<li
+						th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+						th:each="i : ${#numbers.sequence(1, totalPages)}"><a
+						th:replace="fragments :: page_link(${moduleURL}, ${i}, ${i})"></a></li>
+					<li
+						th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="fragments :: page_link(${moduleURL}, ${currentPage + 1}, 'Tới')"></a>
+					</li>
+					<li
+						th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a
+						th:replace="fragments :: page_link(${moduleURL}, ${totalPages}, 'Trang cuối')"></a>
+					</li>
+
+				</ul>
+			</nav>
+
+		</div>
+	</div>
+	<div th:fragment="price_fragment(productPrice)" th:remove="tag">
+		 	<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">
+			<span >[[${CURRENCY_SYMBOL}]]</span>
+			[[${#numbers.formatDecimal(productPrice, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]
+			</span>
+			<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">
+			[[${#numbers.formatDecimal(productPrice, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]
+			<span >[[${CURRENCY_SYMBOL}]]</span>
+			</span>
+	</div>
+
+	<div th:fragment="modal_dialog" class="modal fade text-center"
+		id="modalDialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: rgb(190, 40, 40);" class="modal-title"
+						id="modalTitle">Cảnh báo!</h4>
+					
+				</div>
+				<div class="modal-body">
+					<span id="modalBody"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:fragment="confirm_modal" class="modal fade text-center"
+		id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: rgb(190, 40, 40);" class="modal-title">Xác nhận xóa</h4>
+					<button type="button" class="close" data-dismiss="modal">$times;</button>
+					
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-success" href="" id="yesButton">OK</a>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div th:fragment="format_currency(amount)" th:remove="tag">
+		<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+	</div>
+	
+	<div th:fragment="currency_input(amount)" th:remove="tag">
+		<input type="text" readonly class="form-control" th:value="${(CURRENCY_SYMBOL_POSITION == 'Before price' ? CURRENCY_SYMBOL : '') + #numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + (CURRENCY_SYMBOL_POSITION == 'After price' ? CURRENCY_SYMBOL : '')}">
+	</div>
+
+	<div th:fragment="format_time(dateTime)" th:remove="tag">
+		<span th:text="${#dates.format(dateTime, 'dd-MM-yyyy | HH:mm:ss')}"></span>
+	</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<form th:action="@{/settings/save_general}" method="post" enctype="multipart/form-data">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Sao lưu dữ liệu auto</label>
+				<div class="col-sm-2">
+					<select name="BACKUP_YN" class="form-control">
+						<option value="Y" th:selected="(${BACKUP_YN} == Y)">Có</option>
+						<option value="N" th:selected="(${BACKUP_YN} == N)">Không</option>
+						
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Tên WebSite</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="SITE_NAME"
+						th:value="${SITE_NAME}" required />
+				</div>
+				<label class="col-sm-2 col-form-label">Logo WebSite</label>
+				<div class="col-sm-5">
+					<div id="myfileupload">
+						<img class="img-fluid" width="100" th:src="@{${SITE_LOGO}}"
+							alt="Site Logo Thumb image" id="thumbnail" />
+							<label for="fileImage" class="custom-file-upload">Chọn ảnh</label>
+						<input type="file" accept="image/png, image/jpeg" name="fileImage" id="fileImage" />
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">HotLine</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="PHONE"
+						th:value="${PHONE}" required />
+				</div>
+				<label class="col-sm-2 col-form-label">Copyright</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="COPYRIGHT"
+						th:value="${COPYRIGHT}" required />
+				</div>
+				
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Tel</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="TEL"
+						th:value="${TEL}" required />
+				</div>
+				<label class="col-sm-2 col-form-label">Giờ hoạt động</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="TIMES"
+						th:value="${TIMES}" required />
+				</div>
+			</div>
+			<div class="form-group row">
+				
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Email liên hệ</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="EMAIL_COMPANY"
+						th:value="${EMAIL_COMPANY}" required />
+				</div>
+				<label class="col-sm-2 col-form-label">Địa chỉ</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="ADDRESS_COMPANY"
+						th:value="${ADDRESS_COMPANY}" required />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Loại tiền</label>
+				<div class="col-sm-3">
+					<select name="CURRENCY_ID" class="form-control">
+						<th:block th:each="currency : ${listCurrencies}">
+							<option th:value="${currency.id}" 
+								th:selected="(${currency.id} == ${CURRENCY_ID})">[[${currency}]]</option>
+						</th:block>
+					</select>
+				</div>
+				<label class="col-sm-2 col-form-label">Mã số thuế</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="TAX_CODE"
+						th:value="${TAX_CODE}" required />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Vị trí (trước/sau)</label>
+				<div class="col-sm-3">
+					<select name="CURRENCY_SYMBOL_POSITION" class="form-control">
+						<option value="Before price" title="giá sẽ được hiển thị: đ 00000"
+							th:selected="(${CURRENCY_SYMBOL_POSITION} == 'Before price')">Phía
+							trước giá</option>
+						<option value="After price" title="giá sẽ được hiển thị: 00000 đ"
+							th:selected="(${CURRENCY_SYMBOL_POSITION} == 'After price')">Phía
+							sau giá</option>
+					</select>
+				</div>
+				<label class="col-sm-2 col-form-label">Định dạng số tiền</label>
+				<div class="col-sm-5">
+					<select name="DECIMAL_DIGITS" class="form-control">
+						<option value="0" th:selected="(${DECIMAL_DIGITS} == 0)">0</option>
+						<option value="1" th:selected="(${DECIMAL_DIGITS} == 1)">1</option>
+						<option value="2" th:selected="(${DECIMAL_DIGITS} == 2)">2</option>
+						<option value="3" th:selected="(${DECIMAL_DIGITS} == 3)">3</option>
+						<option value="4" th:selected="(${DECIMAL_DIGITS} == 4)">4</option>
+						
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Định dạng tiền tệ < 1000</label>
+				<div class="col-sm-3">
+					<select name="DECIMAL_POINT_TYPE" class="form-control">
+						<option value="POINT" title="giá sẽ được hiển thị: .000"
+							th:selected="(${DECIMAL_POINT_TYPE} == 'POINT')">Point (.)</option>
+						<option value="COMMA" title="giá sẽ được hiển thị: ,000"
+							th:selected="(${DECIMAL_POINT_TYPE} == 'COMMA')">Comma (,)</option>
+					</select>
+				</div>
+				<label class="col-sm-2 col-form-label">Định dạng tiền tệ > 1000</label>
+				<div class="col-sm-5">
+					<select name="THOUSANDS_POINT_TYPE" class="form-control">
+						<option value="POINT" title="giá sẽ được hiển thị: 000.000.000"
+							th:selected="(${THOUSANDS_POINT_TYPE} == 'POINT')">Point (.)</option>
+						<option value="COMMA" title="giá sẽ được hiển thị: 000,000,000"
+							th:selected="(${THOUSANDS_POINT_TYPE} == 'COMMA')">Comma (,)</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Link Connect</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="LINK_CONNECT"
+						th:value="${LINK_CONNECT}" required />
+				</div>
+				<label class="col-sm-2 col-form-label">Link ZAlO</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="LINK_ZALO"
+						th:value="${LINK_ZALO}" required />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Link FaceBook</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="LINK_FB"
+						th:value="${LINK_FB}" required />
+				</div>
+				<label class="col-sm-2 col-form-label">Link YouTube</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="LINK_YT"
+						th:value="${LINK_YT}" required />
+				</div>
+			</div>
+			<div class="text-center">
+				<input class="btn btn-primary" type="submit" value="Lưu"/>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

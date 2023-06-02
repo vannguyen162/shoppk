@@ -1,0 +1,81 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+    <!-- Main Wrapper Start -->
+    <!--Offcanvas menu area start-->
+    <div class="off_canvars_overlay">
+                
+    </div>
+
+<div th:replace="navigation :: offcanvas_menu"></div>
+<header th:replace="navigation :: header_menu"></header>
+    <!--header area end-->
+    <div id="br-color-conent">
+    <!--shop  area start-->
+    <div class="shop_area shop_reverse">
+        <div class="container">
+            <div class="shop_inner_area mt-3">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <!--shop wrapper start-->
+                        <!--shop toolbar start-->
+                        <div class="shop_title mt-2">
+                            <h1>[[${pageTitle}]]</h1>
+                        </div>
+                         <!--shop toolbar end-->
+                        
+                         <div class="row shop_wrapper" >
+                            <div class="col-lg-4 col-md-4 col-12 " th:each="board : ${listBoard}">
+                                <div class="single_product">
+                                    <div class="product_thumb">
+                                        <a class="primary_img" th:href="@{'/board/detail/' + ${board.id}}"><img th:src="@{${board.boardImagePath}}" alt=""></a>
+                                    </div>
+                                    
+                                    <div class="product_content grid_content">
+                                        <h3><a th:href="@{'/board/detail/' + ${board.id}}">[[${board.shortTitle}]]</a></h3>
+                                    </div>
+                                    
+                                    <div class="product_content list_content">
+                                        <h3><a th:href="@{'/board/detail/' + ${board.id}}">[[${board.shortTitle}]]</a></h3>
+                                        <h3><a>[[${board.numViewValue}]]: Lượt xem</a></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!--shop toolbar end-->
+                        <!--shop wrapper end-->
+                        
+                        <div th:replace="fragments :: pagination('/board', 'tin tức')"></div>
+                    </div>
+                    
+                </div>
+            </div>   
+                
+        </div>
+    </div>
+    <!--shop  area end-->
+    
+    <!--footer area start-->
+    <div th:replace="navigation :: footer"></div>
+    <!--footer area end-->
+</div>
+
+<!-- JS
+============================================ -->
+
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+
+
+
+</body>
+
+</html>

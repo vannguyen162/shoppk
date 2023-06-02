@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- Main Head -->
+<head th:replace="fragments :: page_head('Trang chủ', 'none')"></head>
+<!-- End Head -->
+<body  class="app sidebar-mini rtl">
+	<!-- Main Header -->
+	<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	<main class="app-content">
+		<div class="home-background">
+			<div class="col-md-12 col-lg-12">
+				<div class="row">
+					<h2
+						style="position: fixed;top: 50%;left: 79%;width: 100%;transform: translate(-50%, -50%);">Chào
+						mừng bạn đến với hệ thống quản lý Website HTY COMPUTER</h2>
+				</div>
+				<!--END right-->
+			</div>
+		</div>
+		<!--Left-->
+	</main>
+</body>
+</html>

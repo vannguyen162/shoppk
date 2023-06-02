@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+  <title>[[${SITE_NAME}]] | [[${title}]]</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link id="favico" rel="icon" type="image/png" th:href="@{/images/favicon.png}" sizes="16x16 32x32 48x48 64x64 96x96">
+  <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+  <!-- Main CSS-->
+
+  <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/nvn.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- or -->
+
+  <!-- Font-icon css-->
+  <link rel="stylesheet" type="text/css"
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+   
+  
+  <script src="https://code.iconify.design/3/3.0.1/iconify.min.js"></script>
+  
+
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"> 
+  <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/main.js}"></script>
+  <script type="text/javascript" th:src="@{/js/jsBarcode.all.min.js}"></script>
+
+  <link rel="stylesheet" type="text/css" th:href="@{/css/dropdown-formuser.css}">
+</head>
+<body>
+<!-- sort link -->
+     <th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+     	<a
+     		th:href="@{${moduleURL} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null  ? '&categoryId=' + categoryId : ''}}">
+     		[[${columnLabel}]]
+     	</a>
+     	<span th:if="${sortField == fieldName}"
+     		th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+     </th>
+<!-- end sort link -->
+
+<!-- page-link -->
+     <a th:fragment="page_link(pageNum, label)"
+     	class="page-link" 
+     	th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}  + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null  ? '&categoryId=' + categoryId : ''}}">[[${label}]]</a>
+<!-- end page-link -->
+
+<!-- enabled status -->
+	<div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
+		<a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-blue" style="color: #008c04"
+			th:href="@{${entityURL} + '/enabled/false'}"
+			th:title="'Ẩn ' + ${entityName}"></a> 
+		<a th:if="${enabled == false}" class="fas fa-minus-circle fa-2x icon-dark"
+			th:href="@{${entityURL} + '/enabled/true'}"
+			title="'Hiện ' + ${entityName}"></a>
+	</div>
+	
+<!-- end enabled status -->
+
+<!-- actions -->
+ 	<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
+ 		<th:block th:if="${visible}">
+		<a class="link-delete p-2"
+			th:href="@{${deleteURL}}"
+			th:entityId="${entityId}" 
+			th:title="'Xóa ' + ${entityName}"> <span class="iconify" data-icon="subway:delete" style="color: #c93b3b;" data-width="24" data-height="24"></span></a>
+		</th:block>
+	</div>
+	<div th:fragment="edit(entityName, editURL)" th:remove="tag">
+		<a class="edit p-2"
+			th:href="@{${editURL}}"
+			th:title="'Sửa thông tin ' + ${entityName}"><span class="iconify" data-icon="carbon:edit" style="color: #dfaf15;" data-width="24" data-height="24"></span></a>
+	</div>
+	
+	
+<!-- end actions -->
+
+	<div th:fragment="pagination(entityName)" th:remove="tag">
+
+		<div class="text-center" th:if="${totalItems > 0}">
+			<span>Hiển thị [[${entityName}]] [[${startCount}]] đến [[${endCount}]] trên
+				[[${totalItems}]]</span>
+		</div>
+		<div class="text-center" th:unless="${totalItems > 0}">
+			<span>Không tìm thấy thông tin [[${entityName}]]</span>
+		</div>
+		<div th:if="${totalPages > 1}">
+			<nav>
+				<ul class="pagination justify-content-center">
+					<li
+						th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="fragments :: page_link(1, 'Trang đầu')"></a>
+					</li>
+					<li
+						th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="fragments :: page_link(${currentPage - 1}, 'Lui')"></a>
+					</li>
+					<li
+						th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+						th:each="i : ${#numbers.sequence(1, totalPages)}"><a
+						th:replace="fragments :: page_link(${i}, ${i})"></a></li>
+					<li
+						th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="fragments :: page_link(${currentPage + 1}, 'Tới')"></a>
+					</li>
+					<li
+						th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a
+						th:replace="fragments :: page_link(${totalPages}, 'Trang cuối')"></a>
+					</li>
+
+				</ul>
+			</nav>
+
+		</div>
+	</div>
+
+
+	<div th:fragment="search_form()" class="col-auto row fl-right" style="margin-left: auto;">
+		<form th:action="@{${moduleURL} + '/page/1'}" class="form-inline "
+			style="display: flex;">
+			<input type="hidden" name="sortField" th:value="${sortField}"></input>
+			<input type="hidden" name="sortDir" th:value="${sortDir}"></input>
+			&nbsp; &nbsp; <input style="height: 32px" type="search"
+				name="keyword" th:value="${keyword}" class="form-control"
+				placeholder="Nhập từ khóa" aria-label="Search"
+				aria-describedby="search-addon" />
+
+			<button type="submit" class="btn btn-secondary">
+				<i class="fas fa-search"></i>
+			</button>
+			&nbsp;
+			<button type="button" class="btn btn-secondary"
+				onclick="clearFilter()">
+				<i class="fas fa-eraser"></i>
+			</button>
+		</form>
+	</div>
+	<div th:fragment="message">
+		<div th:if="${message != null}"
+			class="alert alert-success text-center">[[${message}]]</div>
+	</div>
+	
+	<div th:fragment="currency_input(amount)" th:remove="tag">
+		<input type="text" readonly class="form-control" th:value="${(CURRENCY_SYMBOL_POSITION == 'Before price' ? CURRENCY_SYMBOL : '') + #numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + (CURRENCY_SYMBOL_POSITION == 'After price' ? CURRENCY_SYMBOL : '')}">
+	</div>
+	
+	<div th:fragment="format_currency(amount)" th:remove="tag">
+		<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+	</div>
+
+	<div th:fragment="format_time(dateTime)" th:remove="tag">
+		<span th:text="${#dates.format(dateTime, 'dd-MM-yyyy | HH:mm:ss')}"></span>
+	</div>
+
+
+</body>
+</html>

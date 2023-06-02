@@ -1,0 +1,44 @@
+<div class="modal-header">
+	<h4 style="color: rgb(190, 40, 40);" class="modal-title">Trạng thái đơn hàng</h4>
+</div>
+
+<section class="gradient-custom-5">
+	<div class="p-3">
+		<div>
+			<span>Thời gian đặt hàng:</span>
+			<span>[[${order.FormattedOrdertime}]]</span>
+		</div>
+		<div>
+			<span>Dự kiến giao vào:</span>
+			<span>[[${order.FormattedDeliverDate}]]</span>
+		</div>
+		<div>
+			<span>Gửi tới:</span>
+			<span>[[${order.ShippingAddress}]]</span>
+		</div>
+	</div>
+	<div class="container py-5">
+		<div class="main-timeline-5">
+			<th:block th:each="track : ${order.orderTracks}">
+				<div class="timeline-5 right-5">
+					<div class="card">
+						<div class="card-body">
+							<h5>[[${track.status}]]</h5>
+							<div>
+								<div class="text-muted">
+									<span class="mb-0">[[${track.notes}]]</span> <i
+										class="fa fa-clock-o text-end" aria-hidden="true"> 
+										<span class="small" th:replace="fragments :: format_time(${track.updatedTime})"></span>
+									</i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</th:block>
+		</div>
+	</div>
+</section>
+<!-- <div class="modal-footer">
+	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+</div> -->

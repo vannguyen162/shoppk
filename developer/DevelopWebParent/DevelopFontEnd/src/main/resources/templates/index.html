@@ -1,0 +1,223 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Trang chủ', 'none')"></head>
+
+<body>
+
+    <!-- Main Wrapper Start -->
+    <!--Offcanvas menu area start-->
+    <div class="off_canvars_overlay">
+                
+    </div>
+<div th:replace="navigation :: offcanvas_menu"></div>
+    <!--Offcanvas menu area end-->
+
+<header th:replace="navigation :: header_menu"></header>
+	<div id="br-color-conent">
+    <!--slider area start-->
+    <div class="slider_area slider_style home_three_slider owl-carousel">
+		<th:block th:each="slider : ${listSliders}">
+			<div class="single_slider" th:data-bgimg="@{${slider.sliderImagePath}}">
+				<div class="container">
+					<div class="row align-items-center">
+						</div>
+				</div>
+			</div>
+		</th:block>
+    </div>
+	<!--slider area end-->
+	
+	<!-- 26/03/2023 -->
+	<div class="banner_section banner_section_three">
+		<div class="container-fluid">
+			<div class="row " style="padding-left: 13%; padding-right: 13%">
+				<th:block th:each="brand : ${listBrands}">
+					<div class="col-lg-2 col-md-3 col-sm-3 col-ss-3 none-padding" style="padding: 0 !important; background-color: #fff">
+						<div class="cate-item">
+							<a th:href="@{'/brand/' + ${brand.id} + '/page/1'}" title="Laptop DELL">
+								<div class="cate-img">
+									<img width="80" class="img-fluid" th:src="@{${brand.logoPath}}" alt="Laptop DELL">
+								</div>
+								<div class="cate-name">[[${brand.name}]]</div>
+							</a>
+						</div>
+					</div>
+				</th:block>
+			</div>
+		</div>
+	</div>
+
+    <!--product section area start-->
+    <section class="product_section womens_product">
+        <div class="container">
+            <div class="row">   
+                <div class="col-12">
+                   <div class="section_title header-line-center">
+                       <h2>Sản phẩm của chúng tôi</h2>
+                   </div>
+                </div> 
+            </div>    
+            <div class="product_area"> 
+                 <div class="tab-content">
+                      <div class="tab-pane fade show active" id="clothing" role="tabpanel">
+                             <div class="product_container">
+                                <div class="row product_column4">
+                                    <div class="col-lg-3" th:each="productView : ${listProductsByViews}">
+                            <div class="single_product">
+                                <div class="product_thumb">
+                                    <a class="primary_img" th:href="@{'/p/' + ${productView.alias}}"><img th:src="@{${productView.mainImagePath}}" alt=""></a>
+                                    <a class="secondary_img" th:href="@{'/p/' + ${productView.alias}}"><img th:src="@{${productView.mainImagePath}}" alt=""></a>
+                                    <div class="product_sale" th:if="${productView.discountPercent > 0}">
+                                        <span>-[[${productView.DiscountPercentPrice}]]%</span>
+                                    </div>
+                                </div>
+								<div class="product_content">
+									<h3>
+										<a th:href="@{'/p/' + ${productView.alias}}">[[${productView.shortName}]]</a>
+									</h3>
+									<div th:if="${productView.discountPercent <= 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productView.price})"></div>
+										</span>
+									</div>
+									<div th:if="${productView.discountPercent > 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productView.discountPriceSale})"></div>
+										</span> <span class="old_price">
+											<div
+												th:replace="fragments :: price_fragment(${productView.price})"></div>
+										</span>
+									</div>
+								</div>
+							</div>
+                        </div>
+                                </div>
+                            </div>
+                      </div>
+                </div>
+            </div>
+               
+        </div>
+    </section>
+    
+    <!--product section area start-->
+    <section class="product_section womens_product bottom">
+        <div class="container">
+            <div class="row">   
+                <div class="col-12">
+                   <div class="section_title bottom-line-center">
+                       <h2>Sản phẩm tiêu biểu</h2>
+                   </div>
+                </div> 
+            </div>    
+            <div class="product_area"> 
+                 <div class="row">
+                    <div class="product_carousel product_three_column4 owl-carousel">
+                        <div class="col-lg-3" th:each="productRelated : ${listProductsRelateds}">
+                            <div class="single_product">
+                                <div class="product_thumb">
+                                    <a class="primary_img" th:href="@{'/p/' + ${productRelated.alias}}"><img th:src="@{${productRelated.mainImagePath}}" alt=""></a>
+                                    <a class="secondary_img" th:href="@{'/p/' + ${productRelated.alias}}"><img th:src="@{${productRelated.mainImagePath}}" alt=""></a>
+                                    <div class="product_sale">
+                                        <span>-[[${productRelated.discountPercentPrice}]]%</span>
+                                    </div>
+                                </div>
+                                <div class="product_content">
+									<h3>
+										<a th:href="@{'/p/' + ${productRelated.alias}}">[[${productRelated.shortName}]]</a>
+									</h3>
+									<div th:if="${productRelated.discountPercent <= 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productRelated.price})"></div>
+										</span>
+									</div>
+									<div th:if="${productRelated.discountPercent > 0}">
+										<span class="current_price">
+											<div
+												th:replace="fragments :: price_fragment(${productRelated.discountPriceSale})"></div>
+										</span> <span class="old_price">
+											<div
+												th:replace="fragments :: price_fragment(${productRelated.price})"></div>
+										</span>
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+               
+        </div>
+    </section>
+    <!--product section area end-->
+
+	
+
+    <div th:replace="navigation :: footer"></div>
+    <!--footer area end-->
+   	</div>
+    
+    <!--Popup Notice area-->
+	<th:block th:unless="${#lists.isEmpty(listPoppupNotices)}">
+		<th:block th:each="item : ${listPoppupNotices}">
+			<!-- <div class="layPop" th:id="${item.id}"> -->
+			<div class="layPop" th:id="${item.id}" data-message-id="${item.id}">
+				<table width="100%" height="100%" border="0" cellspacing="0"
+					cellpadding="0" bgcolor="#ffffff">
+					<tbody>
+						<tr height="20">
+							<td id="popTitle" align="center">
+								[[${item.shortDescription}]]</td>
+						</tr>
+						<tr height="100%">
+							<td align="center">
+								<div id="divView">
+									<div th:utext="${item.fullDescription}"></div>
+								</div>
+							</td>
+						</tr>
+						<tr height="20">
+							<td align="right" class="foot-pop"><a
+								class="permanently-closed"
+								style="vertical-align: middle; float: left;"><strong
+									class="close-pop">[Không hiển thị tin này nữa]</strong></a> <a
+								class="close-pop" href="#"><strong class="close-pop">[ĐÓNG]</strong></a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</th:block>
+	</th:block>
+	<!--Popup Notice area end-->
+<!-- JS
+============================================ -->
+
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		
+		// Select the slider element
+		var slider = $('.home_three_slider');
+
+		// Initialize the Owl Carousel plugin
+		slider.owlCarousel();
+
+		// Set the interval to move to the next slide every 3 seconds
+		setInterval(function() {
+		  slider.trigger('next.owl.carousel');
+		}, 3000);
+	</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+	<!-- Main Wrapper Start -->
+	<!--Offcanvas menu area start-->
+	<div class="off_canvars_overlay"></div>
+	<div th:replace="navigation :: offcanvas_menu"></div>
+	<header th:replace="navigation :: header_menu"></header>
+	<!--header area end-->
+
+	<!--shop  area start-->
+	<div class="shop_area shop_reverse">
+		<div class="container-fluid text-center">
+			<div class="shop_inner_area">
+				<div th:if="${title != null}">
+					<h3>[[${title}]]</h3>
+				</div>
+				<div th:if="${message != null}">
+					<h3>[[${message}]]</h3>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!--shop  area end-->
+
+	<!--footer area start-->
+	<div th:replace="navigation :: footer"></div>
+	<!--footer area end-->
+	<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+</script>
+
+	<!-- Plugins JS -->
+	<script th:src="@{/js/plugins.js}"></script>
+	<!-- Main JS -->
+	<script th:src="@{/js/main.js}"></script>
+	<script th:src="@{/js/common_customer_form.js}"></script>
+
+</body>
+
+</html>

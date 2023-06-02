@@ -1,0 +1,109 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+	<!-- Main Wrapper Start -->
+	<!--Offcanvas menu area start-->
+	<div class="off_canvars_overlay"></div>
+	<div th:replace="navigation :: offcanvas_menu"></div>
+	<header th:replace="navigation :: header_menu"></header>
+	<!--header area end-->
+
+	<!--shop  area start-->
+	<div class="shop_area shop_reverse">
+		<div class="container">
+			<div class="shop_inner_area mt-3">
+				<h3 class="account-title">[[${pageTitle}]]</h3>
+				<div class="table-wrap">
+					<div class="table-responsive">
+						<table class="table align-middle mb-0 bg-white">
+							<thead class="bg-light">
+								<tr>
+									<th>Thời gian đặt hàng</th>
+									<th>Sản phẩm</th>
+									<th>Thành tiền</th>
+									<th>Trạng thái</th>
+									<th>Hành động</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="order : ${listOrders}">
+									<td><span class="name"
+										th:replace="fragments :: format_time(${order.orderTime})"></span></td>
+									<td><span class="date" th:utext="${order.productNames}"></span></td>
+									<td><span class="amount"
+										th:replace="fragments :: format_currency(${order.total})"></span></td>
+									<td><span class="status"
+										th:class="'textOrderStatus' + ${order.id}">[[${order.status}]]</span></td>
+									<td><a class="link-detail"
+										th:href="@{'/order/detail/' + ${order.id}}"
+										title="Theo giõi đơn hàng"><i class="fa fa-spinner" aria-hidden="true"></i></a></td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+
+
+					<div th:replace="fragments :: pagination('/order', 'orders')"></div>
+					<div class="modal fade" id="detailModal">
+						<div class="modal-dialog modal-xl">
+							<div class="modal-content"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shop  area end-->
+
+	<!--footer area start-->
+	<div th:replace="navigation :: footer"></div>
+	<!--footer area end-->
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		moduleURL = "[[@{/order}]]";
+		
+		$(".link-detail").on("click", function(e){
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});
+	</script>
+
+	<!-- Plugins JS -->
+	<script th:src="@{/js/plugins.js}"></script>
+	<!-- Main JS -->
+	<script th:src="@{/js/main.js}"></script>
+
+	<!-- 03/04/2023 -->
+	<script type="text/javascript">
+		var hideElements = function() {
+			$('#collapse-list a').each(function(i) {
+				if (i > 2) {
+					$(this).slideToggle(200);
+				}
+			});
+		};
+
+		hideElements();
+		var toggleStatus = true;
+		$('#toggle-collapse').click(
+				function() {
+					if (toggleStatus) {
+						$('#collapse-list .list-group-item:not(:visible)')
+								.slideToggle(200);
+					} else {
+						hideElements();
+					}
+					toggleStatus = !toggleStatus;
+				});
+	</script>
+
+</body>
+
+</html>

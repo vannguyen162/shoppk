@@ -1,0 +1,154 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+	<!-- Main Wrapper Start -->
+	<!--Offcanvas menu area start-->
+	<div class="off_canvars_overlay"></div>
+	<div th:replace="navigation :: offcanvas_menu"></div>
+	<header th:replace="navigation :: header_menu"></header>
+	<!--header area end-->
+<div id="br-color-conent">
+	<!--shop  area start-->
+	<div class="shop_area shop_reverse">
+		<div class="container">
+			<div class="shop_inner_area">
+
+				<form class="border rounded p-3 row br-color-w" th:action="@{/update_account_details}" method="post"
+					th:object="${customer}">
+					<input type="hidden" th:field="*{id}" />
+					<input type="hidden" name="redirect" th:value=${param.redirect} />
+					<div th:if="${message != null}"
+						class="alert alert-success text-center">[[${message}]]</div>
+					<div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Loại tài khoản</label>
+							<div class="col-sm-2">
+								<input class="form-control" type="email"
+									th:field="*{authenticationType}" readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Email</label>
+							<div class="col-sm-10">
+								<input class="form-control" type="email" th:field="*{email}"
+									readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Họ</label>
+							<div class="col-sm-10">
+								<input class="form-control" type="text" th:field="*{firstName}">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Tên</label>
+							<div class="col-sm-10">
+								<input class="form-control" type="text" th:field="*{lastName}">
+							</div>
+						</div>
+						<th:block
+							th:if="${customer.authenticationType.name() == 'DATABASE'}">
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label">Mật khẩu</label>
+								<div class="col-sm-4">
+									<input class="form-control" type="password"
+										th:field="*{password}" maxlength="15" minlength="4"
+										oninput="checkPasswordMatch(document.getElementById('confirmPassword'))">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label">Nhập lại mật khẩu</label>
+								<div class="col-sm-4">
+									<input class="form-control" type="password"
+										id="confirmPassword" maxlength="15" minlength="4"
+										oninput="checkPasswordMatch(this)">
+								</div>
+							</div>
+						</th:block>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Số điện thoại</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="number"
+									th:field="*{phoneNumber}" required="required" maxlength="15"
+									minlenght="8">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Quốc gia</label>
+							<div class="col-sm-4">
+								<select class="form-control" th:field="*{country}">
+									<th:block th:each="country : ${listCountries}">
+										<option th:value="${country.id}">[[${country.name}]]</option>
+									</th:block>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Tỉnh/thành</label>
+							<div class="col-sm-4 ">
+								<input class="form-control" type="text" th:field="*{state}"
+									maxlength="45" minlenght="3" list="listStates">
+								<datalist id="listStates"></datalist>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Phường/xã</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" th:field="*{city}"
+									required="required" maxlength="45" minlenght="2">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Tên đường</label>
+							<div class="col-sm-10">
+								<input class="form-control" type="text"
+									th:field="*{addressLine2}" required="required" maxlength="64"
+									minlenght="3">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Số nhà</label>
+							<div class="col-sm-10">
+								<input class="form-control" type="text"
+									th:field="*{addressLine1}" required="required" maxlength="64"
+									minlenght="3">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Mã ZIP</label>
+							<div class="col-sm-3">
+								<input class="form-control" type="text" th:field="*{postalCode}"
+									maxlength="10" minlenght="2">
+							</div>
+						</div>
+					</div>
+					<div class="login_submit">
+						<button type="submit" class="btn btn-primary">Cập nhật</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!--shop  area end-->
+
+	<!--footer area start-->
+	<div th:replace="navigation :: footer"></div>
+	<!--footer area end-->
+	</div>
+	<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	</script>
+
+	<!-- Plugins JS -->
+	<script th:src="@{/js/plugins.js}"></script>
+	<!-- Main JS -->
+	<script th:src="@{/js/main.js}"></script>
+	<script th:src="@{/js/common_customer_form.js}"></script>
+
+</body>
+
+</html>

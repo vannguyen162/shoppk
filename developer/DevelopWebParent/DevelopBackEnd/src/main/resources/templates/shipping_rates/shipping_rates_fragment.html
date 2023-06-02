@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="cod_support" th:remove="tag">
+		<a th:if="${rate.codSupported}" class="fas fa-hand-holding-usd fa-2x" style="color: #008c04"
+			th:href="@{'/shipping_rates/cod/' + ${rate.id} + '/enabled/false'}"
+			title="Tắtt giao hàng khu vực này"></a> 
+		<a th:unless="${rate.codSupported}" class="fas fa-minus-circle fa-2x icon-dark"
+			th:href="@{'/shipping_rates/cod/' + ${rate.id} + '/enabled/true'}"
+			title="Mở giao hàng khu vực này"></a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head('Quản lý người dùng', 'none')"></head>
+	<!-- End Head -->
+
+<body  class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/notice/new}"
+									title="Tạo tin tức"><i class="fas fa-plus"></i>Thêm thông báo</a>
+							</div>
+						</div>
+						<div th:replace="fragments :: message"></div>
+
+						<table class="table table-hover table-bordered js-copytextarea table-responsive"
+							cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+							<thead>
+								<tr>
+									<th >Tính năng</th>
+									<th>Trạng thái</th>
+									<th>Loại thông báo</th>
+									<th>Tiêu đề</th>
+									<th>Ngày bắt đầu</th>
+									<th>Ngày kết thúc</th>
+									<th>Cập nhật lần cuối</th>
+									<th>Người c.nhật cuối</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="notice : ${listNotices}">
+									<td class=" fixed-col-fixed">
+										<div th:replace="fragments :: edit('notice', '/notice/edit/' + ${notice.id})"></div>
+										<div th:replace="fragments :: delete('notice', ${notice.id}, '/notice/delete/' + ${notice.id}, true)"></div>
+									</td>
+									<td class=" fixed-col-fixed">
+										<div th:replace="fragments :: status(${notice.enabled}, 'notice', '/notice/' + ${notice.id})"></div>
+									</td>
+									<td>[[${notice.PoppupFormat}]]</td>
+									<td>[[${notice.shortTitle}]]</td>
+									<td>[[${notice.StartDateFormat}]]</td>
+									<td>[[${notice.EndDateFormat}]]</td>
+									<td>[[${notice.upDateFormat}]]</td>
+									<td>[[${notice.workUser}]]</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div th:replace="fragments :: pagination('notice ')"></div>
+        </div>
+      </div>
+    </div>
+
+<div th:replace="modal_fragments :: confirm_modal"></div>
+<div class="modal fade" id="detailModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>
+  </main>
+
+<!-- Essential javascripts for application to work-->
+
+
+	<script th:src="@{/js/commom-list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/notice}]]";
+
+		$(document).ready(
+				function() {
+					$(".link-delete").on("click", function(e) {
+						e.preventDefault();
+						showDeleteConfirmUserModal($(this), 'thông báo ');
+					});
+					$(".link-detail").on(
+							"click",
+							function(e) {
+								e.preventDefault();
+								linkDetailURL = $(this).attr("href");
+								$("#detailModal").modal("show").find(
+										".modal-content").load(linkDetailURL);
+							});
+				});
+	</script>
+
+	<div th:replace="fragments/js.html"></div>
+
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : true,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 2
+			},
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			}
+		});
+	</script>
+</body>
+
+</html>

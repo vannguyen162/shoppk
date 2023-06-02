@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->
+<head>
+	<head th:replace="fragments :: page_head(${pageTitle}, 'tag')"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/richText/richtext.min.css}">
+	<script th:src="@{/richText/jquery.richtext.js}"></script>
+</head>
+
+<!-- End Head -->
+
+
+
+<body class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	<main class="app-content">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div class="tile">
+
+					<h3 class="tile-title">[[${pageTitle}]]</h3>
+					<div class="tile-body">
+
+						<form th:action="@{/products/save}" method="post" onsubmit="return checkUnique(this)"
+							enctype="multipart/form-data"
+							th:object="${product}" id="myForm">
+							<input type="hidden" th:field = "*{id}" />
+							<input type="hidden" th:field = "*{pdtCode}" />
+							<input th:if="${product.category != null}" type="hidden" 
+								id="categoryId" th:value = "${product.category.id}" />
+							<!-- Nav tabs -->
+							<div>
+							<span class="tableCodeFalse">Lưu ý: các trường màu đỏ không được bỏ trống. "Đặc biệt ảnh đại diện sản phẩm!"</span>
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item"><a class="nav-link active"
+										data-toggle="tab" href="#overview" role="tab">Tổng quan</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab"
+										href="#description" role="tab">Mô tả</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab"
+										href="#images" role="tab">Hình ảnh</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab"
+										href="#details" role="tab">Chi tiết sản phẩm</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab"
+										href="#shipping" role="tab">Shipping</a></li>
+								</ul>
+
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div class="tab-pane active p-3" id="overview" role="tabpanel">
+										<div th:replace="products/product_overview :: content"></div>
+									</div>
+									<div class="tab-pane" id="description" role="tabpanel">
+										<th:block th:if="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_description_read_only :: content"></div>
+										</th:block>
+										<th:block th:unless="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_description :: content"></div>
+										</th:block>
+									</div>
+									<div class="tab-pane" id="images" role="tabpanel">
+										<th:block th:if="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_images_read_only :: content"></div>
+										</th:block>
+										<th:block th:unless="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_images :: content"></div>
+										</th:block>
+									</div>
+									<div class="tab-pane p-3" id="details" role="tabpanel">
+										<th:block th:if="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_details_read_only :: content"></div>
+										</th:block>
+										<th:block th:unless="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_details :: content"></div>
+										<div>
+											<input type="button" class="btn btn-secondary" value="+"
+												onclick="addNextDetailSection()" />
+										</div>
+										</th:block>
+									</div>
+									<div class="tab-pane p-3" id="shipping" role="tabpanel">
+										<th:block th:if="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_shipping_read_only :: content"></div>
+										</th:block>
+										<th:block th:unless="${isReadOnlyForSalesperson}">
+											<div th:replace="products/product_shipping :: content"></div>
+										</th:block>
+									</div>
+								</div>
+								<div>
+									<div class="text-center">
+										<button class="btn btn-save" type="submit" id="submit-button" value="Save">Lưu
+											lại</button>
+										<a class="btn btn-cancel" th:href="@{/products}"
+											value="Cancel">Hủy bỏ</a>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!--
+  MODAL
+-->
+			<div th:replace="modal_fragments :: modal_dialog"></div>
+			<!--
+  MODAL
+-->
+		</div>
+
+	</main>
+
+	<script th:src="@{/js/commom-form.js}"></script>
+	<script th:src="@{/js/product_form_images.js}"></script>
+	<script th:src="@{/js/product_form_overview.js}"></script>
+	<script th:src="@{/js/product_form_details.js}"></script>
+
+<script type="text/javascript">
+	MAX_FILE_SIZE = 5242880; // 5MB
+	
+	moduleURL = "[[@{/products}]]";
+	brandModuleURL = "[[@{/brands}]]";
+
+	
+	defaultImageThumbnailSrc = "[[@{/images/default-image.jpg}]]";
+	
+	checkUniqueUrl = "[[@{/products/check_unique}]]";
+
+	
+</script>
+
+<script th:inline="javascript">
+  var form = document.getElementById("myForm");
+  var submitButton = document.getElementById("submit-button");
+  var inputName = document.getElementById("name");
+  var inputCost = document.getElementById("cost");
+  var inputPrice = document.getElementById("price");
+  var inputQty = document.getElementById("qty");
+
+  submitButton.addEventListener("click", function(event) {
+    if (inputName.value === "") {
+      event.preventDefault();
+      showWarningModal("Vui lòng nhập tên sản phẩm");
+    }else if(inputCost.value === "") {
+        event.preventDefault();
+        showWarningModal("Vui lòng nhập giá nhập sản phẩm");
+    }else if(inputPrice.value === "") {
+        event.preventDefault();
+        showWarningModal("Vui lòng nhập giá giá bán");
+    }else if(inputQty.value === "") {
+        event.preventDefault();
+        showWarningModal("Vui lòng nhập số lượng sản phẩm");
+    }
+    
+  });
+</script>
+
+</body>
+
+</html>

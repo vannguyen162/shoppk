@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->
+<head>
+	<head th:replace="fragments :: page_head(${pageTitle}, 'tag')"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/richText/richtext.min.css}">
+	<script th:src="@{/richText/jquery.richtext.js}"></script>
+</head>
+
+<!-- End Head -->
+
+
+
+<body class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	<main class="app-content">
+		<div th:replace="fragments :: message"></div>
+		<div class="row">
+			<div class="col-md-12">
+				<a th:href="@{/backup}" class="btn btn-info">Sao lưu dữ liệu</a>
+				<a th:href="@{/backuplist}" class="btn btn-info">Tải xuống bản sao lưu</a>
+				<div class="tile">
+					<div class="tile-body">
+
+						<!-- Nav tabs -->
+						<div>
+							<ul class="nav nav-tabs" id="settingTab" role="tablist">
+								<li class="nav-item"><a class="nav-link active"
+									data-toggle="tab" href="#general" role="tab">Cài đặt chung</a></li>
+								<li class="nav-item"><a class="nav-link" data-toggle="tab"
+									href="#countries" role="tab">Quốc gia</a></li>
+								<li class="nav-item"><a class="nav-link" data-toggle="tab"
+									href="#states" role="tab">Tỉnh thành</a></li>
+								<li class="nav-item"><a class="nav-link" data-toggle="tab"
+									href="#mailServer" role="tab">Cài đặt Mail</a></li>
+								<li class="nav-item"><a class="nav-link" data-toggle="tab"
+									href="#mailTemplates" role="tab">Nội dung gửi Mail</a></li>
+								<li class="nav-item"><a class="nav-link" data-toggle="tab"
+									href="#payment" role="tab">Thanh toán</a></li>
+							</ul>
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div class="tab-pane active p-3" id="general" role="tabpanel">
+									<div th:replace="settings/general :: content"></div>
+								</div>
+								<div class="tab-pane p-3" id="countries" role="tabpanel">
+									<div th:replace="settings/countries :: content"></div>
+								</div>
+								<div class="tab-pane p-3" id="states" role="tabpanel">
+									<div th:replace="settings/states :: content"></div>
+								</div>
+								<div class="tab-pane p-3" id="mailServer" role="tabpanel">
+									<div th:replace="settings/mail_server :: content"></div>
+								</div>
+								<div class="tab-pane p-3" id="mailTemplates" role="tabpanel">
+									<div th:replace="settings/mail_teplates/mail_templates :: content"></div>
+								</div>
+								<div class="tab-pane p-3" id="payment" role="tabpanel">
+									<div th:replace="settings/payment :: content"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="toast" role="alert" aria-live="polite"
+						aria-atomic="true" style="opacity: 1" data-delay="3000">
+						<div role="alert" aria-live="assertive" aria-atomic="true">
+							<div class="toast-body">
+								<span id="toastMessage"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</main>
+<script type="text/javascript">
+	MAX_FILE_SIZE = 5242880; 
+	contextPath = "[[@{/}]]";
+	
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+	
+	
+	function showToastMessage(message){
+		$("#toastMessage").text(message);
+		$('.toast').toast('show');
+	}
+	
+	$(document).ready(function(){
+		$("#customerVerificationContent").richText();
+		$("#orderConfirmationContent").richText({height: 400});
+	});
+</script>
+
+	<script>
+var autoBackupForm = document.getElementById("auto-backup-form");
+var autoBackupBtn = document.getElementById("auto-backup-btn");
+var cancelBackupBtn = document.getElementById("cancel-backup-btn");
+
+autoBackupForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    autoBackupBtn.style.display = "none";
+    cancelBackupBtn.style.display = "block";
+    fetch(this.action, {
+        method: "POST",
+        body: new FormData(this)
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+});
+
+cancelBackupBtn.addEventListener("click", function() {
+    fetch(autoBackupForm.action, {
+        method: "POST",
+        body: new FormData()
+    })
+    .then(function() {
+        autoBackupBtn.style.display = "block";
+        cancelBackupBtn.style.display = "none";
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+});
+
+</script>
+
+	<script th:src="@{/js/commom-form.js}"></script>
+	<script th:src="@{/js/countries_setting.js}"></script>
+	<script th:src="@{/js/states_setting.js}"></script>
+</body>
+
+</html>

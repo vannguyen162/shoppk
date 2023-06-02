@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+	<!-- End Head -->
+
+<body class="app sidebar-mini rtl">
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+					<div class="tile-body">
+						<div th:replace="fragments :: message"></div>
+						<div class="wrapper">
+							<table
+								class="table table-hover table-bordered js-copytextarea table-responsive"
+								cellspacing="0" cellpadding="0"
+								 id="sampleTable">
+								<thead>
+									<tr>
+										<th>Tải xuống</th>
+										<th style="text-align: center;">Đường dẫn</th>
+										<th>Ngày sao lưu</th>
+										<th>lượt tải</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="item : ${listBackup}">
+										<td class="fixed-col-fixed text-center">
+											<a id="download-link" class="link-detail p-2" title="Download"> 
+												<i class=' bx bx-download'></i>
+											</a>
+										</td>
+										<td>[[${item.pathFile}]]</td>
+										<td>[[${item.UpDateFormat}]]</td>
+										<td style="text-align: center;">[[${item.countDownload}]]</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				<div th:replace="fragments :: pagination('tin tức')"></div>
+        </div>
+      </div>
+    </div>
+	<div th:replace="modal_fragments :: confirm_modal"></div>
+  </main>
+	<div th:replace="fragments/js.html"></div>
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : true,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 1
+			},
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			}
+		});
+	</script>
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		moduleURL = "[[@{/backuplist}]]";
+		
+		const rows = document.querySelectorAll('#sampleTable tbody tr');
+		rows.forEach(row => {
+		  row.addEventListener('click', () => {
+			  const path = row.querySelector('td:nth-child(2)').textContent.trim();
+			  const url = contextPath + 'download?path=' + encodeURIComponent(path);
+			  window.location.href = url;
+		  });
+		});
+
+	</script>
+</body>
+
+</html>

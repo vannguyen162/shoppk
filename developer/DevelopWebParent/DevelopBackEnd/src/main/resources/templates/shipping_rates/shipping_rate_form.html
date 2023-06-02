@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- Main Head -->
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+<!-- End Head -->
+
+<body class="app sidebar-mini rtl">
+
+	<!-- Main Header -->
+	<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+
+	<main class="app-content">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div class="tile">
+
+					<h3 class="tile-title">[[${pageTitle}]]</h3>
+					<div class="tile-body">
+						<form class="row" th:action="@{/shipping_rates/save}"
+							th:object="${rate}" method="post" id="myForm">
+							<input type="hidden" th:field="*{id}" />
+
+							<div class="col-lg-12 col-md-12 form-group row">
+								<div class="form-group col-md-4">
+									<label for="country" class="control-label">Quốc gia</label>
+									<div class="col-auto">
+										<select th:field="*{country}" class="form-control">
+											<option th:each="country : ${listCountries}"
+												th:value="${country.id}">[[${country.name}]]</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group col-md-4">
+									<label for="state" class="control-label">Tỉnh thành</label>
+									<div class="col-auto">
+										<input class="form-control" type="text" th:field="*{state}"
+											required minlength="3" maxlength="64" list="listStates">
+										<datalist id="listStates"></datalist>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 form-group row">
+								<div class="form-group col-md-4">
+									<label for="postalCode" class="control-label">Phí</label> <input
+										class="form-control" type="number" th:field="*{rate}"
+										step="0.1" required minlength="0" maxlength="45">
+								</div>
+								<div class="form-group col-md-4">
+									<label for="postalCode" class="control-label">Ngày giao</label>
+									<input class="form-control" type="number" th:field="*{days}"
+										step="0.1" required minlength="0" maxlength="45">
+								</div>
+							</div>
+							<div class="form-group col-md-12">
+								<label class="col-sm-2 col-form-label"></label>
+								<div class="ml-1">
+									<input type="checkbox" th:field="*{codSupported}"> <span>
+										Giao COD (Lưu ý: chọn đồng nghĩa áp dụng giao hàng rồi nhận tiền. Không áp dụng cho thanh toán trước)</span>
+								</div>
+							</div>
+
+							<div class="form-group col-md-10 text-center">
+								<button class="btn btn-save" id="submit-button" type="submit"
+									value="Save">Lưu lại</button>
+								<!-- <input class="btn btn-cancel" value="Cancel" id="buttonCancel" /> -->
+								<a class="btn btn-cancel" th:href="@{/shipping_rates}"
+									value="Cancel">Hủy bỏ</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!--MODAL-->
+			<div th:replace="modal_fragments :: modal_dialog"></div>
+			<!--MODAL-->
+		</div>
+
+	</main>
+
+	<!--===============================================================================================-->
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		moduleURL = "[[@{/shipping_rates}]]";
+	</script>
+	<script th:src="@{/js/commom-form.js}"></script>
+	<script th:src="@{/js/common_form_country_state.js}"></script>
+	<!--===============================================================================================-->
+
+</body>
+
+<script>
+	var form = document.getElementById("myForm");
+	var inputFirstName = document.getElementById("firstName");
+	var inputLastName = document.getElementById("lastName");
+	var inputEmail = document.getElementById("email");
+	var inputPhoneNumber = document.getElementById("phoneNumber");
+	var inputState = document.getElementById("state");
+	var submitButton = document.getElementById("submit-button");
+
+	submitButton
+			.addEventListener(
+					"click",
+					function(event) {
+						if (inputFirstName.value === ""
+								|| inputLastName.value === "") {
+							event.preventDefault();
+							showWarningModal("Vui lòng nhập đầy đủ họ tên");
+						} else if (inputEmail.value === "") {
+							event.preventDefault();
+							showWarningModal("Vui lòng nhập Email của bạn");
+						} else if (inputPhoneNumber.value === "") {
+							event.preventDefault();
+							showWarningModal("Vui lòng nhập số điện thoại của bạn");
+						} else if (inputState.value === "") {
+							event.preventDefault();
+							showWarningModal("Vui lòng lựa chọn tỉnh/thành của bạn hoặc nhập mới nếu không có trong danh sách");
+						}
+					});
+</script>
+
+</html>

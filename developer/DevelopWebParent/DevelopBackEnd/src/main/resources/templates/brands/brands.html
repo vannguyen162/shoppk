@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- Main Head -->
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+<!-- End Head -->
+
+<body class="app sidebar-mini rtl">
+
+	<!-- Main Header -->
+	<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+
+	<main class="app-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/brands/new}"
+									title="Thêm"><i class="fas fa-plus"></i> Tạo mới thương
+									hiệu</a>
+							</div>
+							<div th:replace="fragments :: search_form"></div>
+						</div>
+					</div>
+					<div th:replace="fragments :: message"></div>
+					<table
+						class="table table-hover table-bordered js-copytextarea table-responsive"
+						cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+						<thead>
+							<tr>
+								<th>Tính năng</th>
+								<th>LOGO</th>
+								<th>Tên thương hiệu</th>
+								<th>Danh mục</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="brand : ${listBrands}">
+								<td class="fixed-col-fixed">
+									<div th:replace="fragments :: edit('thương hiệu', '/brands/edit/' + ${brand.id})"></div>
+									<div th:replace="fragments :: delete('thương hiệu', ${brand.id}, '/brands/delete/' + ${brand.id}, true)"></div>
+								</td>
+								<td><img width="120" class="img-fluid"
+									th:src="@{${brand.logoPath}}"></td>
+								<td>[[${brand.name}]]</td>
+
+								<td class="table-td-center"><th:block
+										th:each="cat : ${brand.categories}">
+										<span class="badge badge-secondary" th:text="${cat.name}"></span>
+									</th:block></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:replace="fragments :: pagination('thương hiệu')"></div>
+				</div>
+			</div>
+		</div>
+		<div th:replace="modal_fragments :: confirm_modal"></div>
+	</main>
+
+	<!-- Essential javascripts for application to work-->
+	<script type="text/javascript">
+		moduleURL = "[[@{/brands}]]";
+		
+		$(document).ready(function(){
+			$(".link-delete").on("click", function(e){
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'thương hiệu');
+			});
+		});
+
+	</script>
+	<div th:replace="fragments/js.html"></div>
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : false,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 1
+			},
+		});
+	</script>
+</body>
+
+</html>

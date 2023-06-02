@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head('Quản lý tin tức', 'none')"></head>
+	<!-- End Head -->
+
+<body onload="time()" class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/board/newboard}"
+									title="Tạo tin tức"><i class="fas fa-plus"></i> Tạo tin</a>
+							</div>
+						</div>
+						<div th:replace="fragments :: message"></div>
+						<div class="wrapper">
+							<table
+								class="table table-hover table-bordered js-copytextarea table-responsive"
+								cellspacing="0" cellpadding="0"
+								 id="sampleTable">
+								<thead>
+									<tr>
+										<th>Tính năng</th>
+										<th>Trạng thái</th>
+										<th>Mã tin tức</th>
+										<th>Loại tin tức</th>
+										<th>Lượt xem</th>
+										<th>Tiêu đề</th>
+										<th>Ngày tạo</th>
+										<th>Thời gian diễn ra</th>
+										<th>Thời gian kết thúc</th>
+										<th>Cập nhật lần cuối</th>
+										<th>Người làm việc</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="board : ${listBoard}">
+										<td class="fixed-col-fixed">
+											<a class="link-detail p-2"
+											th:href="@{'/board/detail/' + ${board.id}}"
+											title="Xem giả lập tin tức"> <span class="iconify" data-icon="gg:details-more" style="color: #219917;" data-width="24" data-height="24"></span>
+											</a>
+											<div
+												th:replace="fragments :: edit('tin tức', '/board/edit/' + ${board.id})"></div>
+											<div
+												th:replace="fragments :: delete('tin tức', ${board.id}, '/board/delete/' + ${board.id}, true)"></div>
+										</td>
+										<td>
+											<div
+												th:replace="fragments :: status(${board.enabled}, 'board', '/board/' + ${board.id})"></div>
+										</td>
+										<td>[[${board.boardNo}]]</td>
+										<td>[[${board.KindFormat}]]</td>
+										<td>[[${board.NumViewValue}]]</td>
+										<td>[[${board.shortTitle}]]</td>
+										<td>[[${board.createDateFormat}]]</td>
+										<td>[[${board.StartDateFormat}]]</td>
+										<td>[[${board.EndDateFormat}]]</td>
+										<td>[[${board.upDateFormat}]]</td>
+										<td>[[${board.workUser}]]</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				<div th:replace="fragments :: pagination('tin tức')"></div>
+        </div>
+      </div>
+    </div>
+<div th:replace="modal_fragments :: confirm_modal"></div>
+  </main>
+  
+  	<div class="modal fade" id="detailModal">
+		<div class="modal-dialog modal-xl" style="min-width: 1000px">
+			<div class="modal-content" >
+			</div>
+		</div>
+	</div>
+  
+	<div th:replace="fragments/js.html"></div>
+
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : true,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 2
+			},
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			},
+	        dom: 'Bfrtip',
+	        buttons: [
+	            {
+	                extend: 'csv',
+	                text: '<i class="fas fa-file-csv"></i> Xuất file CSV',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(2))'
+	        		},
+	        		filename: 'notice_' + new Date().toLocaleDateString() + "_" + new Date().toLocaleTimeString().slice(0,5)
+	            },
+	            {
+	                extend: 'excel',
+	                text: '<i class="fas fa-file-excel"></i> Xuất file Excel',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(2))'
+	        		},
+	        		filename: 'notice_' + new Date().toLocaleDateString() + "_" + new Date().toLocaleTimeString().slice(0,5)
+	            },
+	            {
+	                extend: 'pdf',
+	                text: '<i class="fas fa-file-pdf"></i> Xuất file PDF',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(2))'
+	        		},
+	        		filename: 'notice_' + new Date().toLocaleDateString() + "_" + new Date().toLocaleTimeString().slice(0,5)
+	            },
+	            {
+	                extend: 'print',
+	                text: '<i class="fas fa-print"></i> In',
+	                exportOptions: {
+	        			columns: ':not(:first-child, :nth-child(2))'
+	        		}
+	            }
+	        ]
+		});
+	</script>
+
+	<script type="text/javascript">
+		moduleURL = "[[@{/board}]]";
+		
+		$(document).ready(function(){
+			$(".link-delete").on("click", function(e){
+				e.preventDefault();
+				showDeleteConfirmUserModal($(this), 'tin tức: ');
+			});
+		});
+		$(".link-detail").on("click", function(e){
+			e.preventDefault();
+			linkDetailURL = $(this).attr("href");
+			$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+		});
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,202 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+    <!-- Main Wrapper Start -->
+    <!--Offcanvas menu area start-->
+    <div class="off_canvars_overlay">
+                
+    </div>
+
+<div th:replace="navigation :: offcanvas_menu"></div>
+<header th:replace="navigation :: header_menu"></header>
+    <!--header area end-->
+    
+    <!--shop  area start-->
+    <div class="shop_area shop_reverse">
+		<div class="container">
+			<!--breadcrumbs area start-->
+			<div class="breadcrumbs_area other_bread">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<div class="breadcrumb_content">
+								<ul>
+									<li><a th:href="@{/}">Trang chủ</a></li>
+									<li>/</li>
+									<li>[[${pageTitle}]]</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--breadcrumbs area end-->
+			<!-- shopping cart area start -->
+			<div class="shopping_cart_area">
+				<div class="container" >
+					<form action="#">
+						<div class="row">
+							<div class="col-12">
+								<div class="table_desc">
+									<div class="cart_page table-responsive">
+										<table>
+											<thead>
+												<tr>
+													<th class="product_count">Stt</th>
+													<th class="product_thumb">Ảnh</th>
+													<th class="product_name">Tên sản phẩm</th>
+													<th class="product-price">Giá</th>
+													<th class="product_quantity">Số lượng</th>
+													<th class="product_remove">Xóa</th>
+													<th class="product_total">Thành tiền</th>
+												</tr>
+											</thead>
+											<tbody>
+												<th:block th:each="item, status : ${cartItems}">
+												<input type="hidden" id="quantityInStock{{item.product.id}}" data-quantity="{{item.product.quantity}}" />
+													<tr th:with="product = ${item.product}" class="roww"
+														th:id="'row' + ${status.count}">
+														
+														
+														<td class="divCount">[[${status.count}]]</td>
+
+														<td class="product_thumb"><a
+															th:href="@{'/p/' + ${product.alias}}" target="_blank"><img
+																th:src="@{${product.mainImagePath}}" alt=""
+																style="height: 50px"></a></td>
+														<td class="product_name"><a
+															th:href="@{'/p/' + ${product.alias}}" target="_blank"
+															th:title="${product.name}">
+																[[${item.product.shortName}]]</a></td>
+														<td class="product-price">
+															<div
+																th:replace="product/product_fragment :: product_price"></div>
+														</td>
+														<td class="product_quantity">
+															<div class="cart-qty-td">
+															<div 
+																th:replace="cart/quantity_control :: quantity_control(${item.quantity}, ${product.id})"></div>
+															</div>
+														</td>
+														<td class="product_remove"><a class="linkRemove"
+															th:rowNumber="${status.count}"
+															th:href="@{'/cart/remove/' + ${product.id}}"><i
+																class="fa fa-trash-o"></i></a></td>
+														<td class="product_total"><span
+															th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}"
+															th:remove="tag"> [[${CURRENCY_SYMBOL}]] <span
+																th:id="'subtotal' + ${product.id}" class="subtotal">
+																	[[${#numbers.formatDecimal(item.subtotal, 1,
+																	THOUSANDS_POINT_TYPE, DECIMAL_DIGITS,
+																	DECIMAL_POINT_TYPE)}]] </span>
+														</span> <span
+															th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}"
+															th:remove="tag"> <span
+																th:id="'subtotal' + ${product.id}" class="subtotal">
+																	[[${#numbers.formatDecimal(item.subtotal, 1,
+																	THOUSANDS_POINT_TYPE, DECIMAL_DIGITS,
+																	DECIMAL_POINT_TYPE)}]] </span> [[${CURRENCY_SYMBOL}]]
+														</span></td>
+													</tr>
+												</th:block>
+
+											</tbody>
+											<tfoot id="sectionTotal">
+												<tr>
+													<td class="product_total" colspan="6">Tổng</td>
+													<td class="product_total"><span
+														th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}"
+														th:remove="tag"> [[${CURRENCY_SYMBOL}]] <span
+															id="estimateToltal">
+																[[${#numbers.formatDecimal(estimateToltal, 1,
+																THOUSANDS_POINT_TYPE, DECIMAL_DIGITS,
+																DECIMAL_POINT_TYPE)}]] </span>
+													</span> <span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}"
+														th:remove="tag"> <span id="estimateToltal">
+																[[${#numbers.formatDecimal(estimateToltal, 1,
+																THOUSANDS_POINT_TYPE, DECIMAL_DIGITS,
+																DECIMAL_POINT_TYPE)}]] </span> [[${CURRENCY_SYMBOL}]]
+													</span></td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</form>
+					<div class="cart_submit mb-3">
+						<div th:if="${shippingSupported}">
+							<form th:action="@{/checkout}">
+								<button type="submit">Thanh toán</button>
+							</form>
+						</div>
+						<div th:unless="${shippingSupported}">
+							<div>
+								<span class="h5 text-warning">*địa chỉ của bạn hiện tại
+									không được hỗ trợ giao hàng*</span>
+							</div>
+							<div th:if="${usePrimaryAddressAsDefault}">
+								<a th:href="@{/account_details(redirect=cart)}">Cập nhật địa
+									chỉ của bạn</a>
+							</div>
+							<div th:if="${usePrimaryAddressAsDefault}">
+								<a th:href="@{/address_book(redirect=cart)}">Thay đổi địa
+									chỉ nhận hàng</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="sectionEmptyCartMessage" th:class="'container' + ${#lists.isEmpty(cartItems) ? '' : ' d-none'}">
+					<h3 class="text-center" style="padding-bottom: 10%">Bạn chưa có sản phẩm nào trong giỏ hàng</h3>
+				</div>
+				
+			</div>
+			<!-- shopping cart area end -->
+
+		</div>
+	</div>
+    <!--shop  area end-->
+    
+    <!--footer area start-->
+    <div th:replace="navigation :: footer"></div>
+	<div th:replace="fragments :: modal_dialog"></div>
+    <!--footer area end-->
+
+
+<!-- JS
+============================================ -->
+
+<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+	
+	decimalDigits = [[${DECIMAL_DIGITS}]];
+	decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
+	thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+	
+	
+	
+</script>
+
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+<script th:src="@{/js/jquery.number.min.js}"></script>
+<script th:src="@{/js/shopping_cart.js}"></script>
+<script th:src="@{/js/common_modal.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+
+
+
+</body>
+
+</html>

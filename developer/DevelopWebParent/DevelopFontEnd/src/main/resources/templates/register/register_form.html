@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body id="br-color-conent">
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4 m-3">
+			<div class="account_form register mt-3">
+				<h2>Đăng kí tài khoản</h2>
+				<form class="row br-color-w" th:action="@{/create_customer}" method="post"
+					th:object="${customer}" onsubmit="return checkEmailUnique(this);"
+					enctype="multipart/form-data">
+					<!-- <input type="hidden" th:field = "*{id}" /> -->
+					<div>
+						<div>
+							<label>Họ<span>*</span></label> <input type="text"
+								th:field="*{firstName}" required="required" maxlength="45"
+								minlenght="2">
+						</div>
+						<div>
+							<label>Tên<span>*</span></label> <input type="text"
+								th:field="*{lastName}" required="required" maxlength="45"
+								minlenght="2">
+						</div>
+						<div>
+							<label>Email<span>*</span></label> <input type="email"
+								th:field="*{email}" required="required" maxlength="45"
+								minlenght="8">
+						</div>
+						<div>
+							<label>Mật khẩu<span>*</span></label> <input type="password"
+								th:field="*{password}" required="required" maxlength="15"
+								minlength="4"
+								oninput="checkPasswordMatch(document.getElementById('confirmPassword'))">
+						</div>
+						<div>
+							<label>Nhập lại mật khẩu<span>*</span></label> <input
+								type="password" id="confirmPassword" required="required"
+								maxlength="15" minlength="4" oninput="checkPasswordMatch(this)">
+						</div>
+						<div>
+							<label>Số điện thoại<span>*</span></label> <input type="number"
+								th:field="*{phoneNumber}" required="required" maxlength="15"
+								minlenght="8">
+						</div>
+						<div>
+							<label>Địa chỉ<span>*</span></label> <input type="text"
+								th:field="*{addressLine1}" required="required" maxlength="64"
+								minlenght="3">
+						</div>
+						<div>
+							<label>Phường/xã<span>*</span></label> <input type="text"
+								th:field="*{city}" required="required" maxlength="45"
+								minlenght="2">
+						</div>
+						<div>
+							<label>Quốc gia<span>*</span></label>
+							<div class="col-sm-12">
+								<select class="form-control" th:field="*{country}">
+									<th:block th:each="country : ${listCountries}">
+										<option th:value="${country.id}">[[${country.name}]]</option>
+									</th:block>
+								</select>
+							</div>
+						</div>
+						<div>
+							<label>Tỉnh/thành</label>
+							<div class="col-sm-12">
+								<input type="text" th:field="*{state}" maxlength="45"
+									minlenght="3" list="listStates">
+								<datalist id="listStates"></datalist>
+							</div>
+						</div>
+						<div>
+							<label>Mã ZIP</label> <input type="text" th:field="*{postalCode}"
+								maxlength="10" minlenght="2">
+						</div>
+					</div>
+					<div class="login_submit">
+						<button type="submit">Đăng kí</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+
+	<!-- JS
+============================================ -->
+<div th:replace="fragments :: modal_dialog"></div>
+
+
+	<!-- Plugins JS -->
+	<script th:src="@{/js/plugins.js}"></script>
+	<!-- Main JS -->
+	<script th:src="@{/js/main.js}"></script>
+	<script th:src="@{/js/common_customer_form.js}"></script>
+	<script th:src="@{/js/common_modal.js}"></script>
+
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+
+
+		function checkEmailUnique(form) {
+			url = contextPath + "customers/check_unique_email";
+			customerEmail = $("#email").val();
+			csrfValue = $("input[name='_csrf']").val();
+
+			params = {
+				email : customerEmail,
+				_csrf : csrfValue
+			};
+
+			$.post(
+				url,
+				params,
+				function(response) {
+					if (response == "OK") {
+						form.submit();
+					} else if (response == "Duplicated") {
+						showWarningModal("Email này đã được đăng kí vui lòng lựa chọn Email khác: "
+								+ customerEmail);
+					} else {
+						showErrorModal("Không thể kết nối tới máy chủ");
+					}
+	
+				}).fail(function() {
+				showErrorModal("Không thể kết nối tới máy chủ");
+			});
+
+			return false;
+		}
+
+	</script>
+
+</body>
+
+</html>

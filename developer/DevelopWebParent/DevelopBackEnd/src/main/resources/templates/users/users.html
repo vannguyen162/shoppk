@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<!-- Main Head -->	
+<head th:replace="fragments :: page_head('Quản lý tài khoản', 'none')"></head>
+	<!-- End Head -->
+
+<body  class="app sidebar-mini rtl">
+
+	<!-- Main Header -->	
+<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+	
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
+								<a class="btn btn-add btn-sm" th:href="@{/users/newuser}"
+									title="Thêm"><i class="fas fa-plus"></i> Tạo mới nhân viên</a>
+							</div>
+							<div class="col-sm-1">
+								<a th:href="@{/users/export/csv}"
+									class="btn btn-delete btn-sm print-file js-textareacopybtn"
+									type="button" title="Xuất file CSV"><i class="fas fa-file-csv"></i> Xuất CSV</a>
+							</div>
+							<div class="col-sm-1">
+								<a th:href="@{/users/export/excel}" class="btn btn-excel btn-sm"
+									title="Xuất file Excel"> <i class="fas fa-file-excel"></i>
+									Xuất Excel
+								</a>
+							</div>
+							<div class="col-sm-1">
+								<a th:href="@{/users/export/pdf}"
+									class="btn btn-delete btn-sm pdf-file" type="button"
+									title="Xuất file PDF"> <i class="fas fa-file-pdf"></i> Xuất
+									PDF
+								</a>
+							</div>
+<!-- 							<div class="col-sm-1">
+								<a class="btn btn-delete btn-sm" type="button" title="Xóa"
+									onclick="myFunction(this)"><i class="fas fa-trash-alt"></i>
+									Xóa tất cả </a>
+							</div> -->
+
+							<div th:replace="fragments :: search_form"></div>
+						</div>
+						<div th:replace="fragments :: message"></div>
+						<table class="table table-hover table-bordered js-copytextarea table-responsive"
+							cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+							<thead>
+								<tr>
+									<th>Tính năng</th>
+									<th>Họ và Tên</th>
+									<th>Trạng thái</th>
+									<th>Chức vụ</th>
+									<th>Ảnh thẻ</th>
+									<th>Địa chỉ</th>
+									<th>Ngày sinh</th>
+									<th>SĐT</th>
+									<th>Cmnd/Căn cước</th>
+									<th>Học vấn</th>
+									<th>Tình trạng</th>
+									<th>Giới tính</th>
+									<th>Email</th>
+									<th>Ngày tạo</th>
+									<th>Thâm niên</th>
+									<th>Cập nhật cuối</th>
+									<th>Người c.nhật</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="user : ${listUsers}" >
+									<td class="fixed-col-fixed">
+										<div th:replace="fragments :: edit('tài khoản', '/users/edit/' + ${user.id})"></div>
+										<div th:replace="fragments :: delete('tài khoản', ${user.id}, '/users/delete/' + ${user.id}, true)"></div>
+									</td>
+									<td>[[${user.fullName}]]</td>
+									<td>
+										<div th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})"></div>
+									</td>
+									<td>[[${user.RolesLocalName}]]</td>
+									<td><span th:if="${user.photos == null}"
+										class="fas fa-picture-o fa-3x"></span> <img height="50"
+										class="img-fluid" th:if="${user.photos != null}"
+										th:src="@{${user.photosImagePath}}" /></td>
+									<td>[[${user.adress}]]</td>
+									<td>[[${user.date}]]</td>
+									<td>[[${user.phone}]]</td>
+									<td>[[${user.identity_card}]]</td>
+									<td>[[${user.FormatedDegrees}]]</td>
+									<td>[[${user.FormatedMaritals}]]</td>
+									<td>[[${user.FormatedSex}]]</td>
+									<td>[[${user.email}]]</td>
+									<td th:text="${#dates.format(user.createdTime, 'dd-MM-yyyy')}"></td>
+									<td>[[${user.SeniorityInYMD}]]</td>
+									<td>[[${user.UpDateFormat}]]</td>
+									<td>[[${user.workUser}]]</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				<div th:replace="fragments :: pagination('tài khoản ')"></div>
+        </div>
+      </div>
+    </div>
+<div th:replace="modal_fragments :: confirm_modal"></div>
+  </main>
+  <!-- Essential javascripts for application to work-->
+  
+  	<script type="text/javascript">
+		moduleURL = "[[@{/users}]]";
+		
+		$(document).ready(function(){
+			$(".link-delete").on("click", function(e){
+				e.preventDefault();
+				showDeleteConfirmUserModal($(this), 'tài khoản: ');
+			});
+		});
+
+	</script>
+  
+<!--   <script type="text/javascript">
+  $(document).ready(function(){
+  	$(".linkdelete").on("click", function (e){
+  		e.preventDefault();
+  		
+  		var choice = confirm("Bạn muốn xóa tài khoản này! \nNếu xóa sẽ không thể khôi phục!")
+  		
+  	    if (choice) {
+  	        window.location.href = $(this).attr('href');
+  	    }
+  		
+/*   		link = $(this);
+  		userId = link.attr("userId");
+  		
+  		//alert($(this).attr("href"));
+  		$("#yesButton").attr("href", link.attr("href"));
+  		$("#confirmText").text("Bạn chắc chắn muốn xóa tài khoản: " + userId + "?");
+  		$("#confirmModal").modal(); */
+  		
+  	});
+ 	
+  });
+  
+  function clearFilter() {
+	  window.location = "[[@{/users}]]"
+  }
+  
+  
+  
+  </script> -->
+  
+  <div th:replace="fragments/js.html"></div>
+  <script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : false,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 2
+			},
+			"language" : {
+				"search" : "Tìm nhanh trong bảng",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			},
+		});
+	</script>
+
+</body>
+
+</html>

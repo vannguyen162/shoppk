@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- Main Head -->
+<head th:replace="fragments :: page_head('Thống kê dữ liệu', 'none')"></head>
+<!-- End Head -->
+
+<body class="app sidebar-mini rtl">
+
+	<!-- Main Header -->
+	<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+
+	<main class="app-content">
+				<section class="section">
+					<div class="card">
+						<div class="card-header">
+							<h3>Báo cáo doanh số</h3>
+						</div>
+						<div class="card-body">
+							<div>
+								<ul class="nav nav-tabs" id="reportTab" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active"
+										data-bs-toggle="tab" href="#date" role="tab" >Thống kê ngày tháng năm</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link"
+										data-bs-toggle="tab" href="#category" role="tab" >Thống kê Danh mục</a></li>
+									<li class="nav-item">
+										<a class="nav-link"
+										data-bs-toggle="tab" href="#product" role="tab" >Thống kê sản phẩm</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active p-3" id="date" role="tabpanel">
+										<div
+											th:replace="reports/sales_report_fragment :: content('_date')">
+										</div>
+									</div>
+
+									<div class="tab-pane p-3" id="category" role="tabpanel">
+										<div
+											th:replace="reports/sales_report_fragment :: content('_category')">
+										</div>
+									</div>
+
+									<div class="tab-pane p-3" id="product" role="tabpanel">
+										<div
+											th:replace="reports/sales_report_fragment :: content('_product')">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+	</main>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	currencySymbol = "[[${CURRENCY_SYMBOL}]]";
+	thousandsPointType = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+	decimalPointType = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+	currencySymbolPosition = "[[${CURRENCY_SYMBOL_POSITION}]]";
+	decimalDigits = "[[${DECIMAL_DIGITS}]]";
+	
+	prefixCurrencySymbol = currencySymbolPosition == 'Before price' ? currencySymbol : '';
+	suffixCurrencySymbol = currencySymbolPosition == 'After price' ? currencySymbol : '';
+	
+	$(document).ready(function() {
+		var hash = window.location.hash;
+		$('#reportTab a').click(function(e) {
+			e.preventDefault();
+			var href = $(this).attr('href');
+			if (window.location.hash !== href) {
+				window.location.hash = href;
+				window.location.reload();
+			}
+		});
+		$('#reportTab a[href="' + hash + '"]').tab('show');
+
+		$(document).ready(function() {
+			google.charts.load('current', {'packages': ['corechart', 'table']});
+			google.charts.setOnLoadCallback(loadSalesReportByDate);
+		});
+	});
+</script>
+<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/sales_report_common.js}"></script>
+	<script type="text/javascript" th:src="@{/js/sales_report_by_date.js}"></script>
+	<script type="text/javascript" th:src="@{/js/sales_report_by_category.js}"></script>
+	<script type="text/javascript" th:src="@{/js/sales_report_by_product.js}"></script>
+</body>
+
+</html>

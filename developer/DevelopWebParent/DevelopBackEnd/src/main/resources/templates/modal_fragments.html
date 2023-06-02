@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+<script th:src="@{/js/commom-form.js}"></script>
+<body>
+
+ 	<div th:fragment="modal_dialog" class="modal fade text-center" id="modalDialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: rgb(190, 40, 40);" class="modal-title"
+						id="modalTitle">Cảnh báo!</h4>
+					<button style="color: red" type="button" class="close"
+						data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="modalBody"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+				</div>
+			</div>
+		</div>
+	</div>
+ 	<div th:fragment="confirm_modal" class="modal fade text-center" id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: rgb(190, 40, 40);" class="modal-title"
+						id="modalTitle">Cảnh báo!</h4>
+					<button style="color: red" type="button" class="close"
+						data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-success" href="" id="yesButton">Xóa</a>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

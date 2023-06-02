@@ -1,0 +1,124 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+	<!-- Main Wrapper Start -->
+	<!--Offcanvas menu area start-->
+	<div class="off_canvars_overlay"></div>
+	<div th:replace="navigation :: offcanvas_menu"></div>
+	<header th:replace="navigation :: header_menu"></header>
+	<!--header area end-->
+<div id="br-color-conent">
+	<!--shop  area start-->
+	<div class="shop_area shop_reverse">
+		<div class="container">
+			<div class="shop_inner_area mt-3">
+				<section class="gradient-custom-5">
+					<span class="p-2 text-red-color">*Lưu ý rằng mọi hoạt động của bạn chỉ lưu trữ được trong khoảng thời gian 7 ngày!</span>
+					<div class="container py-5">
+						<div class="main-timeline-5">
+							<div class="timeline-5 right-5">
+								<div class="card">
+									<div class="card-body p-4">
+										<h5>Hôm nay</h5>
+										<div th:each="activity : ${todayActivities}">
+											<div class="text-muted">
+												<span class="mb-0" th:text="${activity.ativity}"></span>
+												<a th:href="${activity.urlLog}" class="details-link" style="color: #4c97f2">[chi tiết...]</a>
+												<i class="fa fa-clock-o text-end" aria-hidden="true">
+												<span
+													class="small">[[${activity.TimeActivityWithHourFormat}]]</span>
+												</i> 
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="timeline-5 right-5">
+								<div class="card">
+									<div class="card-body p-4">
+										<h5>Ngày hôm qua</h5>
+										<div th:each="activity : ${yesterdayActivities}">
+											<div class="text-muted">
+												<span class="mb-0" th:text="${activity.ativity}"></span>
+												<a th:href="${activity.urlLog}" class="details-link" style="color: #4c97f2">[chi tiết...]</a>
+												<i class="fa fa-clock-o text-end" aria-hidden="true"> 
+												<span class="small">[[${activity.TimeActivityFormat}]]</span>
+												</i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="timeline-5 right-5">
+								<div class="card">
+									<div class="card-body p-4">
+										<h5>Trong 7 ngày qua</h5>
+										<div th:each="activity : ${weekActivities}">
+											<div class="text-muted">
+												<span class="mb-0" th:text="${activity.ativity}"></span>
+												<a th:href="${activity.urlLog}" class="details-link" style="color: #4c97f2">[chi tiết...]</a>
+												<i class="fa fa-clock-o text-end" aria-hidden="true"> 
+												<span class="small">[[${activity.TimeActivityFormat}]]</span>
+												</i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!--shop  area end-->
+
+	<!--footer area start-->
+	<div th:replace="navigation :: footer"></div>
+	<!--footer area end-->
+	</div>
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+		
+		var detailsLink = document.querySelector('.details-link:last-child');
+		var urlLog = "${activity.urlLog}";
+		var url = window.location.origin + contextPath + urlLog;
+		detailsLink.setAttribute("href", url);
+	</script>
+
+	<!-- Plugins JS -->
+	<script th:src="@{/js/plugins.js}"></script>
+	<!-- Main JS -->
+	<script th:src="@{/js/main.js}"></script>
+
+	<!-- 03/04/2023 -->
+	<script type="text/javascript">
+		var hideElements = function() {
+			$('#collapse-list a').each(function(i) {
+				if (i > 2) {
+					$(this).slideToggle(200);
+				}
+			});
+		};
+
+		hideElements();
+		var toggleStatus = true;
+		$('#toggle-collapse').click(
+				function() {
+					if (toggleStatus) {
+						$('#collapse-list .list-group-item:not(:visible)')
+								.slideToggle(200);
+					} else {
+						hideElements();
+					}
+					toggleStatus = !toggleStatus;
+				});
+	</script>
+
+</body>
+
+</html>

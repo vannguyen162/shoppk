@@ -1,0 +1,35 @@
+server:
+  port: 8110
+  servlet:
+    context-path: /Shop
+spring:
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 426560381840-3th9m28gv1edoh6ce13iffvn05frtr7s.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+            - email
+            - profile
+          facebook:
+            clientId: 1250497575867659
+            clientSecret: 9ed1ea1c8f58f30d3daf3a4c8900afb9
+            scope:
+            - email
+            - public_profile
+  main:
+    allow-circular-references: true

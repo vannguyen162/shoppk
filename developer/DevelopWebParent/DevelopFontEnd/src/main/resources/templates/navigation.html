@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div class="offcanvas_menu" th:fragment="offcanvas_menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="canvas_open">
+                        <a href="javascript:void(0)"><i class="ion-navicon"></i></a>
+                    </div>
+                    <div class="offcanvas_menu_wrapper">
+                        <div sec:authorize="isAuthenticated()" class="canvas_logout">
+                              <!-- <a href="javascript: document.logoutForm.submit()">Thoát<i class="ionicons ion-log-out"></i></a> -->
+                              <ul>
+									<li class="top_links"><a href="#">Tài khoản <i class="ionicons ion-android-arrow-dropdown"></i></a>
+										<ul class="dropdown_links">
+											<li sec:authorize="isAuthenticated()"><a th:href="@{/account_details}">Tôi</a></li>
+											<li sec:authorize="isAuthenticated()"><a th:href="@{/address_book}">Địa chỉ</a></li>
+											<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Đăng
+													nhập</a></li>
+											<li sec:authorize="isAnonymous()"><a
+												th:href="@{/register}">Đăng kí</a></li>
+											<li sec:authorize="isAuthenticated()"><a
+												href="javascript: document.logoutForm.submit()">Đăng
+													xuất</a></li>
+										</ul></li>
+								</ul>
+                        </div>
+                        <div class="canvas_close">
+                              <a href="javascript:void(0)"><i class="ionicons ion-ios-arrow-thin-left"></i></a>  
+                        </div>
+                        <div class="cart_area">
+                        	<div class="middel_links">
+                               <ul>
+                                   <li><a th:href="@{/}">Trang chủ</a></li>
+                               </ul>
+                            </div>
+                        	<div class="cart_link">
+                                <a th:href="@{/cart}"><i class="fa fa-shopping-basket"></i>Giỏ hàng</a>
+                            </div>
+                        </div>
+                        <div class="search_bar" id="searchNavbar">
+                            <form th:action="@{/search}" method="get">
+                                <input placeholder="Tìm kiếm" name="keyword"
+                                    	th:value="${keyword}"
+                                    	type="search">
+                                <button type="submit" value="Search"><i class="ion-ios-search-strong"></i></button>
+                            </form>
+                        </div>
+                        <div id="menu" class="text-left ">
+                            <ul class="offcanvas_main_menu">
+                                <li class="menu-item-has-children active">
+                                    <a href="#">Shop</a>
+                                    <ul class="sub-menu">
+                                        <li class="menu-item-has-children">
+                                            <a href="#">Danh mục</a>
+                                            <ul class="sub-menu" th:each="cat : ${rootCategories}">
+                                                <li><a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-item-has-children">
+                                            <a href="#">Sản phẩm</a>
+                                            <ul class="sub-menu">
+                                                <li><a href="portfolio.html">Tất cả sản phẩm</a></li>
+                                                <li><a href="portfolio-details.html">Sản phẩm mới</a></li>
+                                                <li><a href="cart.html">Sản phẩm của tháng</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a th:href="@{/account_details}">Tài khoản của tôi</a>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a th:href="@{/board}">Tin tức</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Offcanvas menu area end-->
+
+    <!--header area start-->
+    <header class="header_area header_three" th:fragment="header_menu">
+		<div>
+			<th:block sec:authorize="isAuthenticated()">
+				<form th:action="@{/logout}" method="post" th:hidden="true"
+					name="logoutForm">
+					<input type="submit" value="Logout">
+				</form>
+			</th:block>
+			
+		</div>
+		<!--header top start-->
+        <div class="header_top">
+            <div class="container-fluid">   
+                <div class="row align-items-center">
+                    <div class="col-lg-2 col-md-12">
+                        <div class="welcome_text">
+							<span><i class="fa fa-phone" aria-hidden="true"></i>&nbsp;[[${PHONE}]]</span>
+                        </div>
+                    </div>
+
+					<div class="col-lg-8 col-md-12">
+						<div class="noticeAlow" id="notice-container">
+							<p th:each="shortDescription : ${shortDescriptions}" th:text="${shortDescription}" class="textNoticeAlow notice" id="notice"></p>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-12">
+						<div class="top_right text-right">
+                            <ul>
+                               <li class="top_links row" style="display: inline-block;">
+                               <!-- <span sec:authorize="isAnonymous()">Wellcom!</span>  -->
+									<a sec:authorize="isAnonymous()">Tài khoản<i class="ion-chevron-down"></i></a>
+									<th:block sec:authorize="isAuthenticated()">
+										<a th:href="@{/account_details}" style="padding: 0px"
+											sec:authentication="principal.fullName"></a>
+									</th:block> 
+                               		
+                                    <ul class="dropdown_links">
+                                        
+                                        <th:block sec:authorize="!isAuthenticated()">
+                                        <li><a th:href="@{/login}">Đăng nhập</a></li>
+                                        <li><a th:href="@{/register}">Đăng kí</a></li>
+                                        </th:block>
+										<th:block sec:authorize="isAuthenticated()">
+											<li><a th:href="@{/account_details}">Tôi</a></li>
+											<li><a th:href="@{/address_book}">Địa chỉ</a></li>
+											<li><a th:href="@{/customeractivity}">Lịch sử hoạt động</a></li>
+											<li><a th:href="@{/order/page/1}">Đơn hàng của tôi</a></li>
+											<li><a href="javascript: document.logoutForm.submit()">Đăng
+													xuất</a></li>
+										</th:block>
+									</ul>
+                                </li> 
+                            </ul>
+                        </div>
+						
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--header top start-->
+
+        <!--header middel start-->
+        <div class="header_middel">
+            <div class="container-fluid">
+                <div class="middel_inner">
+                    <div class="row align-items-center">
+                    	
+						<div class="col-auto">
+							<div class="row">
+								<div class="left_menu col-sm-5 row menu-263 mr-1">
+									<div class="main_menu mt-2" >
+										<div class="dropdown">
+											<a id="dropdownMenuButton" data-toggle="dropdown" title="Danh mục sản phẩm"
+												 aria-expanded="false"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></a>
+											<div class="dropdown-menu mt-3"
+												aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" th:href="@{'/allpdt/page/1'}">Tất
+													cả sản phẩm</a>
+												<th:block th:each="rootCat : ${rootCategories}">
+													<a class="dropdown-item"
+														th:href="@{'/c/' + ${rootCat.alias}}">[[${rootCat.name}]]</a>
+												</th:block>
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+						</div>
+						<div class="col-lg-1">
+							<div class="row">
+								<div class="logo col">
+									<a th:href="@{/}"><img class="img-fluid" width="100"
+										th:src="@{${SITE_LOGO}}" alt=""></a>
+								</div>
+								
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<div class="row">
+								<div class="left_menu row text-center">
+									<div class="main_menu col text-center">
+										<nav>
+											<ul>
+												<li><a th:href="@{/}">Trang chủ </a></li>
+												<li><a th:href="@{/board}">Tin tức </a></li>
+												<th:block sec:authorize="isAuthenticated()">
+													<li><a th:href="@{/order/page/1}">Đơn hàng </a></li>
+												</th:block>
+												<li><a href="#">Khuyến mại </a></li>
+												<li><a href="#">Liên hệ</a></li>
+											</ul>
+										</nav>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="cart_area col-auto row" style="margin-left: auto;">
+							<div class="search_bar col-auto" id="searchNavbar"
+								style="margin-left: auto;">
+								<form th:action="@{/search}" method="get">
+									<input name="keyword" placeholder="Tìm kiếm..."
+										th:value="${keyword}" type="search">
+									<button type="submit" value="Search">
+										<i class="ion-ios-search-strong"></i>
+									</button>
+								</form>
+							</div>
+							<div class="cart_link col-auto">
+								<a th:href="@{/cart}"><i class="fa fa-shopping-basket"></i>Giỏ
+									hàng</a>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+        <!--header middel end-->
+
+    </header>
+    <!--header area end-->
+
+
+
+
+<div th:fragment="footer">
+    <!--footer area start-->
+    <footer class="footer_widgets">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-2 col-md-6 col-sm-6 col-6">
+                        <div class="widgets_container">
+                            <h3>Hỗ trợ khách hàng</h3>
+                            <div class="footer_menu">
+                                <ul>
+                                    <li><a href="#">Chính sách đổi trả</a></li>
+                                    <li><a href="#">Pháp lý</a></li>
+                                    <li><a href="#">Sửa chữa và bảo trì</a></li>
+                                    <li><a href="#">Thanh toán và giao hàng</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-6 col-6">
+                        <div class="widgets_container">
+                            <h3>Tiện ích</h3>
+                            <div class="footer_menu">
+                                <ul>
+                                    <li><a href="#">Tin tức</a></li>
+                                    <li><a href="#">Kết nối</a></li>
+                                    <li><a href="#">Sưu tập mã giảm giá</a></li>
+                                    <li><a href="#">Tuyển dụng</a></li>
+                                    <li><a target="_blank" th:href="${LINK_CONNECT}">Hệ thống</a></li>
+                                    <li><a th:href="@{/account_details}">Tài khoản của tôi</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widgets_container contact_us">
+                            <h3>Liên hệ</h3>
+                            <div class="footer_contact">
+                                <p>Địa chỉ: [[${ADDRESS_COMPANY}]]</p>
+                                <p>HotLine: <a th:href="@{'tel:'+ ${PHONE}}">(+84) [[${PHONE}]]</a> </p>
+                                <p>Số điện thoại: <a th:href="@{'tel:'+ ${TEL}}"> [[${TEL}]]</a> </p>
+                                <p>Email: [[${EMAIL_COMPANY}]]</p>
+                                <p>Giờ hoạt động: [[${TIMES}]]</p>
+                                <ul>
+                                    <li><a target="_blank" href="#" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a target="_blank" th:href="${LINK_ZALO}" title="Zalo"><i class="ti-zalo"></i></a></li>
+                                    <li><a target="_blank" th:href="${LINK_FB}" title="facebook"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a target="_blank" th:href="${LINK_YT}" title="youtube"><i class="fa fa-youtube"></i></a></li>
+                                </ul>
+                              
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widgets_container newsletter">
+                            <h3>Kết nối với chúng tôi</h3>
+                            <div class="newleter-content">
+                                <p>Sản phẩm chất lượng hàng đầu, mang đến cho người dùng trải nghiệm tốt nhất.</p>
+                                <p>Gửi Email của bạn tại đây để nhận thông tin ưu đã từ chúng tôi.</p>
+                                 <div class="subscribe_form">
+                                    <form id="mc-form" class="mc-form footer-newsletter" >
+                                        <input id="mc-email" type="email" autocomplete="off" placeholder="Email của bạn..." />
+                                        <button id="mc-submit">Đăng kí !</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer_bottom">
+            <div class="container">
+               <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="copyright_area">
+                            <!-- <p> &copy; 2021 <strong> </strong> Mede with ❤️ by <a href="https://hasthemes.com/" target="_blank"><strong>HasThemes</strong></a></p> -->
+                            <p>[[${COPYRIGHT}]]</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="footer_custom_links">
+                            <ul>
+                                <li><a th:href="@{/order/page/1}">Lịch sửa đặt hàng</a></li>
+                                <li><a href="wishlist.html">Sản phẩm yêu thích</a></li>
+                                <li><a th:href="@{/board}">Tin tức</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>

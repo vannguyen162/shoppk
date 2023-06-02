@@ -1,0 +1,163 @@
+<!doctype html>
+<html class="no-js" lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')"></head>
+
+<body>
+
+    <!-- Main Wrapper Start -->
+    <!--Offcanvas menu area start-->
+    <div class="off_canvars_overlay">
+                
+    </div>
+
+<div th:replace="navigation :: offcanvas_menu"></div>
+<header th:replace="navigation :: header_menu"></header>
+    <!--header area end-->
+    
+    <!--shop  area start-->
+    <div class="shop_area shop_reverse">
+		<div class="container">
+			<!--breadcrumbs area start-->
+			<div class="breadcrumbs_area other_bread">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<div class="breadcrumb_content">
+								<ul>
+									<li><a th:href="@{/}">Trang chủ</a></li>
+									<li>/</li>
+									<li>[[${pageTitle}]]</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--breadcrumbs area end-->
+			<!-- shopping cart area start -->
+			<div class="shopping_cart_area">
+				<div class="container">
+					<div class="coupon_area">
+						<div class="row">
+							<div class="col-lg-6 col-md-6">
+								<div class="left">
+									<div class="card">
+										<div class="card-header">Thông tin địa chỉ nhận hàng</div>
+										<div class="card-body">
+											<p>Gửi tới: [[${shippingAdress}]]</p>
+											<p>
+												<a class="c-a" th:href="@{/address_book}">[Gửi tới địa chỉ khác]</a>
+											</p>
+											
+											<p>Dự kiến giao hàng trong [[${checkoutInfo.deliverDays}]] ngày</p>
+											<p>Ngày dự kiến: [[${checkoutInfo.FormattedDeliverDate}]]</p>
+										</div>
+									</div>
+									<div class="card mt-3 mb-3">
+										<div class="card-header">Phương thức thanh toán</div>
+										<div class="card-body">
+											<div th:if="${checkoutInfo.codSupported}">
+												<form th:action="@{/place_order}" method="post">
+													<input type="radio" name="paymentMethod" id="radioCOD" value="COD"> Thanh toán khi nhận hàng
+													<button class="btn btn-ff6a28 d-none" type="submit" id="buttonSubmit">Đặt hàng</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6">
+								<div class="coupon_code right">
+									<h3>Sản phẩm của tôi</h3>
+									<div class="coupon_inner">
+										<div class="pdt-area">
+											<th:block th:each="item : ${cartItems}">
+												<div class="cart_subtotal"
+													th:with="product = ${item.product}">
+													<div class="col-sm-5">
+														<a class="left" th:href="@{'/p/' + ${product.alias}}"
+															target="_blank">[[${item.product.shortName}]]</a>
+													</div>
+													<div class="col-sm-1">
+														<p>[[${item.quantity}]]</p>
+													</div>
+													<div class="col-sm-3 text-right">
+														<p>
+														<div
+															th:replace="fragments :: format_currency(${product.DiscountPriceSale})"></div>
+														</p>
+													</div>
+													<!-- <div class="col-sm-3">
+													<small>Phí ship:
+														<div
+															th:replace="fragments :: format_currency(${item.shippingCost})"></div>
+													</small>
+												</div> -->
+												</div>
+											</th:block>
+										</div>
+										<div class="cart_subtotal mt-1">
+											<p>Tạm tính</p>
+											<p>
+												<div th:replace="fragments :: format_currency(${checkoutInfo.productTotal})"></div>
+											</p>
+										</div>
+										<div class="cart_subtotal ">
+											<p>Phí giao hàng</p>
+											<p>
+												<div th:replace="fragments :: format_currency(${checkoutInfo.shippingCostTotal})"></div>
+											</p>
+										</div>
+										<div class="cart_subtotal">
+											<p>Thành tiền</p>
+											<p class="cart_amount">
+												<div th:replace="fragments :: format_currency(${checkoutInfo.paymentTotal})"></div>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- shopping cart area end -->
+
+		</div>
+	</div>
+    <!--shop  area end-->
+    
+    <!--footer area start-->
+    <div th:replace="navigation :: footer"></div>
+	<div th:replace="fragments :: modal_dialog"></div>
+    <!--footer area end-->
+
+
+<!-- JS
+============================================ -->
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+<script th:src="@{/js/common_modal.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+
+<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+	
+	
+	$(document).ready(function(){
+		$("#radioCOD").on("click", function(){
+			$("#buttonSubmit").removeClass("d-none");
+		})
+	})
+</script>
+
+</body>
+
+</html>

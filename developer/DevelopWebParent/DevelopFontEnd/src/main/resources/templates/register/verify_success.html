@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Đăng kí', 'none')"></head>
+
+<body>
+
+     <!--Offcanvas menu area start-->
+    <div class="off_canvars_overlay"></div>
+    <div th:replace="navigation :: offcanvas_menu"></div>
+    <header th:replace="navigation :: header_menu"></header>
+ 
+    <!--breadcrumbs area start-->
+    <div class="breadcrumbs_area other_bread">
+        <div class="container">   
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_content">
+                        <ul>
+                            <li><a href="index.html">home</a></li>
+                            <li>/</li>
+                            <li>[[${pageTitle}]]</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>         
+    </div>
+    <!--breadcrumbs area end-->
+
+    <div class="customer_login">
+        <div class="container">
+            <div class="row text-center">
+				<h2>Đăng kí tài khoản thành công</h2>
+				<p>Tài khoản của bạn đã đăng kí thành công</p>
+				<p><a th:href="@{/login}">Đăng nhập ngay</a></p>
+            </div>
+        </div>    
+    </div>
+    
+    
+
+    
+    <!--footer area start-->
+    <div th:replace="navigation :: footer"></div>
+    <!--footer area end-->
+
+<!-- Plugins JS -->
+<script th:src="@{/js/plugins.js}"></script>
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+		<div class="col-lg-4 col-md-4 col-12 " th:fragment="content">
+			<div class="single_product">
+				<div class="product_thumb">
+					<a class="primary_img" th:href="@{'/p/' + ${product.alias}}"><img
+						th:src="@{${product.mainImagePath}}" alt=""></a> <a
+						class="secondary_img"><img
+						th:href="@{'/p/' + ${product.alias}}" alt=""></a>
+
+					<div class="quick_button">
+						<a th:href="@{'/p/' + ${product.alias}}" title="Xem sản phẩm">Xem
+							sản phẩm</a>
+					</div>
+
+					<div class="label_product">
+						<span>Mới</span>
+					</div>
+				</div>
+
+			<div class="product_content grid_content">
+				<h3>
+					<a th:href="@{'/p/' + ${product.alias}}">[[${product.shortName}]]</a>
+				</h3>
+				<!-- <div th:if="${product.discountPercent <= 0}">
+						<span class="current_price">
+							<div th:replace="fragments :: price_fragment(${product.price})"></div>
+						</span>
+					</div>
+					<div th:if="${product.discountPercent > 0}">
+						
+						<span class="current_price">
+							<div th:replace="fragments :: price_fragment(${product.discountPriceSale})"></div>
+						</span>
+						<span class="old_price">
+							<div th:replace="fragments :: price_fragment(${product.price})"></div>
+						</span>
+					</div> -->
+				<div th:replace="product/product_fragment :: product_price"></div>
+				
+			</div>
+
+
+			<div class="product_content list_content">
+					<h3>
+						<a th:href="@{'/p/' + ${product.alias}}">[[${product.shortName}]]</a>
+					</h3>
+					<div class="product_ratting">
+						<ul>
+							<li><a href="#"><i class="fa fa-star"></i></a></li>
+							<li><a href="#"><i class="fa fa-star"></i></a></li>
+							<li><a href="#"><i class="fa fa-star"></i></a></li>
+							<li><a href="#"><i class="fa fa-star"></i></a></li>
+							<li><a href="#"><i class="fa fa-star"></i></a></li>
+						</ul>
+					</div>
+					<div th:replace="product/product_fragment :: product_price"></div>
+					<div class="product_desc">
+						<p th:utext="${product.fullDescription}"></p>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+
+	<div th:fragment="product_price" th:remove="tag">
+		<th:block th:if="${product.discountPercent &lt;= 0}">
+			<span class="current_price">
+				<div th:replace="fragments :: price_fragment(${product.price})"></div>
+			</span>
+		</th:block>
+		<th:block th:if="${product.discountPercent > 0}">
+			<span class="current_price">
+				<div
+					th:replace="fragments :: price_fragment(${product.discountPriceSale})"></div>
+			</span> <span class="old_price">
+				<div th:replace="fragments :: price_fragment(${product.price})"></div>
+			</span>
+		</th:block>
+	</div>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- Main Head -->
+<head th:replace="fragments :: page_head('Quản lý danh mục', 'none')"></head>
+<!-- End Head -->
+
+<body  class="app sidebar-mini rtl">
+
+	<!-- Main Header -->
+	<div th:replace="fragments/header :: menu"></div>
+	<!-- End Header -->
+
+	<main class="app-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tile">
+					<div class="tile-body">
+
+						<div class="row element-button">
+							<div class="col-sm-2">
+
+								<a class="btn btn-add btn-sm" th:href="@{/categories/new}"
+									title="Thêm"><i class="fas fa-plus"></i> Tạo mới danh mục</a>
+							</div>
+							<div class="col-sm-1">
+								<a th:href="@{/categories/export/csv}"
+									class="btn btn-delete btn-sm print-file js-textareacopybtn"
+									type="button" title="Xuất file CSV"><i
+									class="fas fa-file-csv"></i> Xuất CSV</a>
+							</div>
+
+							<div class="col-sm-1">
+								<a th:href="@{/categories/export/excel}"
+									class="btn btn-excel btn-sm" title="Xuất file Excel"> <i
+									class="fas fa-file-excel"></i> Xuất Excel
+								</a>
+							</div>
+							<div th:replace="fragments :: search_form"></div>
+						</div>
+					</div>
+					<div th:replace="fragments :: message"></div>
+					<table class="table table-hover table-bordered js-copytextarea table-responsive"
+						cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+						<thead>
+							<tr>
+								<th>Tính năng</th>
+								<th>Tên danh mục</th>
+								<th>Hình ảnh</th>
+								<th>Định nghĩa</th>
+								<th>Trạng thái</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="cat : ${listCategories}">
+								<td class="fixed-col-fixed">
+									<div
+										th:replace="fragments :: edit('danh mục', '/categories/edit/' + ${cat.id})"></div>
+									<div
+										th:replace="fragments :: delete('danh mục', ${cat.id}, '/categories/delete/' + ${cat.id}, ${!cat.hasChildren})"></div>
+								</td>
+								<td>[[${cat.name}]]</td>
+								<td><img width="120" class="img-fluid"
+									th:src="@{${cat.imagePath}}"></td>
+								<td>[[${cat.alias}]]</td>
+								<td><div
+										th:replace="fragments :: status(${cat.enabled}, 'category', '/categories/' + ${cat.id})"></div></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${keyword != null}" class="text-center">
+						<span>Hiển thị danh mục tổng</span>
+						<div th:replace="fragments :: pagination('danh mục tổng từ ')"></div>
+					</div>
+					<th:block th:unless="${keyword != null}">
+						<div th:replace="fragments :: pagination('danh mục tổng từ ')"></div>
+					</th:block>
+				</div>
+			</div>
+			</div>
+		
+<div th:replace="modal_fragments :: confirm_modal"></div>
+
+	</main>
+
+	<!-- Essential javascripts for application to work-->
+
+	<script type="text/javascript">
+
+		//In dữ liệu
+		var myApp = new function() {
+			this.printTable = function() {
+				var tab = document.getElementById('sampleTable');
+				var win = window.open('', '', 'height=700,width=700');
+				win.document.write(tab.outerHTML);
+				win.document.close();
+				win.print();
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/categories}]]";
+		
+		$(document).ready(function(){
+			$(".link-delete").on("click", function(e){
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'danh mục');
+			});
+		});
+
+	</script>
+	
+		<div th:replace="fragments/js.html"></div>
+
+	<script th:inline="javascript">
+		$('#sampleTable').DataTable({
+			"paging" : false,
+			"searching" : false,
+			"info" : false,
+			"fixedColumns" : {
+				leftColumns : 1
+			},
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"sZeroRecords" : "Không tìm thấy dữ liệu"
+			},
+		});
+	</script>
+</body>
+
+</html>

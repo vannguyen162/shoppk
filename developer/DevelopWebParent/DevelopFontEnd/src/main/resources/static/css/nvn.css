@@ -1,0 +1,331 @@
+.hidden{
+	display: none;
+}
+.c-a {
+	color: #1d2a57;
+}
+.c-a:hover {
+	color: #242424;
+}
+
+.bg-f1f5fa {
+	background-color: #cbdbef
+}
+.btn{
+	padding: 0.1rem 0.56rem;
+}
+.btn-ff6a28{
+	background: #4c97f2;
+	color: #fff;
+}
+.btn-ff6a28:hover {
+    background: #024dbc;
+    color: #fff;
+}
+.ti-zalo{background:url(https://3.bp.blogspot.com/-dhxUC-4idPI/XQcPWomMiwI/AAAAAAAAQ3c/ZJi45O6wlE8jrRzPxs6bZXUSHn0-YJjIgCLcBGAs/s1600/icon_zalo.png) no-repeat 50% 50%;width:40px;height:40px;display:inline-block;background-size:20px!important;vertical-align:middle;margin-right:2px;position:relative;top:-2px}
+
+.noticeAlow {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%; /* set a fixed width */
+}
+
+.textNoticeAlow {
+  display: inline-block;
+  padding-left: 30%;
+  animation: marquee 30s linear infinite;
+  color: #818181;
+  animation-delay: 0s;
+}
+
+@keyframes marquee {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+
+@media only screen and (min-width: 992px) {
+	.layPop {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 471px;
+		height: 600px;
+		background-color: #f1f1f1;
+		z-index: 999;
+	}
+	#divView {
+		word-wrap: break-word;
+		height: 550px;
+		overflow-y: hidden;
+	}
+	#popTitle {
+		background-color: #eeeeee;
+		color: #222222;
+		font-size: 14px;
+		padding: 10px 0;
+		cursor: pointer;
+	}
+	.foot-pop {
+		background-color: #242424;
+		color: #fff;
+		font-size: 14px;
+		padding: 10px 0;
+	}
+	.close-pop {
+		font-size: 15px;
+		color: #fff;
+		font-weight: bold;
+		padding: 0 10px 0 20px;
+	}
+}
+
+@media only screen and (min-width: 1200px){
+	.marginTop50 {
+		margin-top: 50px
+	}
+	.marginBot50{
+		margin-bottom: 50px
+	}
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+	.marginTop50 {
+		margin-top: 45px
+	}
+	.marginBot50{
+		margin-bottom: 45px
+	}
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	.marginTop50 {
+		margin-top: 40px
+	}
+	.marginBot50{
+		margin-bottom: 45px
+	}
+	.layPop{
+		display: none;
+	}
+}
+@media only screen and (max-width: 767px) {
+	.marginTop50 {
+		margin-top: 10px
+	}
+	.marginBot50{
+		margin-bottom: 10px
+	}
+	.layPop{
+		display: none;
+	}
+}
+
+
+.pdt-area{
+	border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+/*26/03/2023*/
+.middel_inner .left_menu .main_menu{
+	max-width: auto;
+}
+.middel_inner .left_menu{
+	width: auto;
+}
+.cate-item{
+    text-align: center;
+    padding: 0 15px;
+    padding-top: 15px;
+    /* padding-bottom: 45px; */
+    border: 1px solid #ededed;
+    margin-left: -1px;
+    margin-top: -1px;
+    position: relative;
+}
+/*======== 07/04/2023 ==========*/
+.cate-item:hover{
+	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+	border: 1px solid #fff;
+}
+.cate-img{
+    min-height: 80px;
+    position: relative;
+}
+/*======== 03/04/2023 ==========*/
+/* The actual timeline (the vertical ruler) */
+.main-timeline-5 {
+  position: relative;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+/* The actual timeline (the vertical ruler) */
+.main-timeline-5::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  background-color: #747474;
+  top: 0;
+  bottom: 0;
+  left: auto;
+  margin-left: -3px;
+}
+
+/* Container around content */
+.timeline-5 {
+  position: relative;
+  background-color: inherit;
+  width: 100%;
+}
+
+/* The circles on the timeline */
+.timeline-5::after {
+  content: "";
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  right: 1px;
+  background-color: #747474;
+  top: 18px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Place the container to the right */
+.right-5 {
+  padding: 0px 0px 20px 40px;
+  left: auto;
+}
+
+/* Add arrows to the right container (pointing left) */
+.right-5::before {
+  content: " ";
+  position: absolute;
+  top: 18px;
+  z-index: 1;
+  left: 30px;
+  border: medium solid #fff;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #fff transparent transparent;
+}
+
+/* Fix the circle for containers on the right side */
+.right-5::after {
+  left: -10px;
+}
+
+@media (max-width: 991px) {
+  .main-timeline-5 {
+    max-width: 100%;
+  }
+}
+.gradient-custom-5 {
+  /* fallback for old browsers */
+  background: #f1f1f1;
+}
+.text-end{
+	float: right;
+}
+.text-red-color{
+	color: red
+}
+
+/* 07/04/2023 */
+#dropdownMenuButton:hover{
+	color: #fff;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+}
+.dropdown-item:hover{
+	color: #fff;
+	background: #4c97f2;
+}
+.main_menu ul li{
+	display: flex;
+	justify-content: center;
+}
+
+/* 11/04/2023 */
+.header-line-center:before,
+.header-line-center:after {
+  content: "";
+  display: inline-block;
+  width: 30%;
+  height: 1px;
+  vertical-align: middle;
+  background-color: #4c97f2;
+}
+
+.header-line-center h2 {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.bottom-line-center:before,
+.bottom-line-center:after {
+  content: "";
+  display: inline-block;
+  width: 35%;
+  height: 1px;
+  vertical-align: middle;
+  background-color: #4c97f2;
+}
+
+.bottom-line-center h2 {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+/* Comment */
+.reply-comments-group{
+	border-left: 5px solid rgba(0, 0, 0, 0.05);
+	padding-left: 5px;
+}
+
+/* end Comment */
+/* line block (all in line) */
+.line-block span{
+	display:inline-block; 
+}
+.color-wrn{
+	color: #fb6e2e;
+}
+.product_code .pdt-content{
+	display: block;
+	width: 100%
+}
+.price-sales {
+	color: #d0021c;
+	font-size: 20px;
+	font-weight: bold;
+}
+.price-new .price-new-ct{
+	display:inline-block; 
+}
+.box-price-percent {
+	color: #d0021c;
+	font-size: 16px;
+}
+.box-pdt{
+	color: #333;
+  font-size: 15px;
+  font-weight: 400;
+}
+.btn-qty-down{
+	border-top-left-radius: 16px!important;
+	border-bottom-left-radius: 16px!important;
+}
+.btn-qty-up{
+	border-top-right-radius: 16px!important;
+	border-bottom-right-radius: 16px!important;
+}
+.cart-qty-td{
+	display: flex;
+	justify-content: center;
+}
+#br-color-conent {
+	background: rgb(252, 251, 251);
+}
+.br-color-w{
+	background-color: #fff
+}

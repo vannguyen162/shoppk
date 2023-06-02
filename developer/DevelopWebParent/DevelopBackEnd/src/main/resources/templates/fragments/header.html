@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vn" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="menu">
+  <!-- Sidebar menu-->
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  <aside class="app-sidebar">
+    <div class="app-sidebar__user">
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+  		<input type="submit"></iput>
+  	</form>
+      <div class="col-auto logout-top">
+      	<div class="col-auto">
+        	<div class="dropdown">
+						<div class="row">
+							<p>Xin chào!</p> &nbsp;
+							<p class="app-sidebar__user-name dropbtn"
+								sec:authentication="principal.fullname"></p>
+						</div>
+						<div class="dropdown-content" >
+						<div id="linksAccount">
+						<a th:href="@{/account}" class="dropdown-item dropdown">Tài khoản</a> 
+						<a id="logoutlink" title="Đăng xuất" href="" class="dropdown-item dropdown">Đăng xuất</a> 
+						</div>
+					</div>
+				</div>
+      	</div>
+      </div>
+    </div>
+    <hr>
+		<ul class="app-menu">
+			
+			<li sec:authorize="hasAuthority('Admin')">
+				<a 
+					class="app-menu__item" th:href="@{/}"><i
+					class='app-menu__icon bx bx-id-card'></i> <span
+					class="app-menu__label">Trang chủ</span></a>
+			</li>
+			<li sec:authorize="hasAuthority('Admin')">
+				<a 
+					class="app-menu__item" th:href="@{/users}"><i
+					class='app-menu__icon bx bx-id-card'></i> <span
+					class="app-menu__label">Quản lý nhân viên</span></a>
+			</li>
+			<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+			
+			<li><a 
+					class="app-menu__item" th:href="@{/brands}"><i
+					class='app-menu__icon bx bxl-shopify'></i><span
+					class="app-menu__label">Quản lý thương hiệu</span></a></li>
+			<li ><a class="app-menu__item" th:href="@{/categories}" ><i
+					class='app-menu__icon bx bx-category'></i><span
+					class="app-menu__label">Quản lý danh mục</span></a></li>
+			
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson', 'Shipper')">
+			<li><a th:classappend="${active}"
+					class="app-menu__item" th:href="@{/products}"><i
+					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+					class="app-menu__label">Quản lý sản phẩm</span></a></li>
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+			<li><a class="app-menu__item" th:href="@{/customers}"><i
+					class='app-menu__icon bx bx-user-voice'></i><span
+					class="app-menu__label">Quản lý khách hàng</span></a></li>
+			</th:block>
+			<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Shipper')">
+			<li><a class="app-menu__item" th:href="@{/orders}"><i
+					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
+						lý đơn hàng</span></a></li>
+			</th:block>
+			<li><a class="app-menu__item" th:href="@{/reports}"><i class='app-menu__icon bx bxs-pie-chart-alt-2'></i><span class="app-menu__label">Thống kê</span></a></li>
+			<li><a class="app-menu__item" th:href="@{/notice}"><i
+					class='app-menu__icon bx bx-volume-low'></i><span
+					class="app-menu__label">Quản lý thông báo</span></a></li>
+			<li><a class="app-menu__item" th:href="@{/board}"><i
+					class='app-menu__icon bx bx-calendar'></i><span
+					class="app-menu__label">Quản lý tin tức</span></a></li>
+			<li><a class="app-menu__item" th:href="@{/slider}"><i
+					class='app-menu__icon bx bx-calendar'></i><span
+					class="app-menu__label">Quản lý quảng cáo</span></a></li>
+			<li><a class="app-menu__item" th:href="@{/shipping_rates}"><i
+					class='app-menu__icon bx bx-map-alt'></i><span
+					class="app-menu__label">Quản lý khu vực</span></a></li>
+			<li sec:authorize="hasAuthority('Admin')">
+				<a 	th:classappend="${#httpServletRequest.getRequestURI() == '/DevelopAdmin/settings' ? 'active':''}"
+					class="app-menu__item" th:href="@{/settings}"><i
+					class='app-menu__icon bx bx-cog'></i><span class="app-menu__label">Cài
+						đặt hệ thống</span></a></li>
+		</ul>
+	</aside>
+</div>
+</html>
